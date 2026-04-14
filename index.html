@@ -1,1 +1,501 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>okioki rent a car | 실시간 렌트카 예약</title>
+  <meta id="siteDescriptionMeta" name="description" content="Netlify 배포용 렌트카 홈페이지. 9대 차량, 실시간 예약 캘린더, 숨겨진 관리자 모드, EmailJS 문의 발송을 지원합니다.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Outfit:wght@400;500;600;700;800&family=SUIT:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="home-page">
+  <div class="page-bg" id="pageBg"></div>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="#hero" id="brandTapTarget">
+        <img class="brand-logo" data-brand-logo src="./okioki.png.png" alt="okioki rent a car logo">
+        <span>
+          <strong>okioki rent a car</strong>
+          <small>Naha Airport · Okinawa Travel · Resort Pickup</small>
+        </span>
+      </a>
+
+      <div class="topbar-tools">
+        <nav class="nav">
+          <a href="./tour.html" data-i18n="navTour"><span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">투어상품</span><span class="copy-pair__secondary">Tours</span></span></a>
+          <a href="#fleet" data-i18n="navFleet"><span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">차량소개</span><span class="copy-pair__secondary">Fleet</span></span></a>
+          <a href="#reservation" data-i18n="navReservation"><span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">예약하기</span><span class="copy-pair__secondary">Book Now</span></span></a>
+        </nav>
+
+        <div class="lang-switcher" role="group" aria-label="언어 선택">
+          <button class="lang-switcher__button is-active" type="button" data-lang-button="kr">KR</button>
+          <button class="lang-switcher__button" type="button" data-lang-button="jp">JP</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero-section" id="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">OKINAWA, ALL IN ONE</p>
+          <h1 data-i18n="heroTitle"><span class="copy-pair"><span class="copy-pair__primary">오키나와 여행,<br>한 번에 해결</span><span class="copy-pair__secondary">Okinawa travel, all in one</span></span></h1>
+          <p class="hero-highlight" data-i18n="heroHighlight">차량 + 일정 + 이동까지 편하게</p>
+          <p class="hero-text" data-i18n="heroText">
+            공항 도착부터 호텔 이동, 관광 일정까지
+            따로 예약할 필요 없이 한 번에 가능합니다.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#reservation" data-i18n="heroCtaPrimary">
+              <span class="button-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                  <rect x="3.5" y="5.5" width="17" height="15" rx="2.5"></rect>
+                  <path d="M7 3.75V7.25"></path>
+                  <path d="M17 3.75V7.25"></path>
+                  <path d="M3.5 10.25H20.5"></path>
+                </svg>
+              </span>
+              <span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">지금 예약하기</span><span class="copy-pair__secondary">Book Now</span></span>
+            </a>
+            <a class="button secondary" href="https://open.kakao.com/o/sWBHJKmi" data-i18n="heroCtaSecondary">
+              <span class="button-icon button-icon--kakao" aria-hidden="true">
+                <img src="./kakao-icon.png" alt="">
+              </span>
+              <span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">카톡 상담하기</span><span class="copy-pair__secondary">Kakao Consultation</span></span>
+            </a>
+            <a class="button map" href="./okinawa-map.html">
+              <span class="button-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                  <path d="M3.5 6.25L8.75 3.75L15.25 6.25L20.5 3.75V17.75L15.25 20.25L8.75 17.75L3.5 20.25Z"></path>
+                  <path d="M8.75 3.75V17.75"></path>
+                  <path d="M15.25 6.25V20.25"></path>
+                </svg>
+              </span>
+              <span class="copy-pair copy-pair--inline" data-i18n="heroCtaMap"><span class="copy-pair__primary">오키나와 관광지도</span><span class="copy-pair__secondary">Sightseeing Map</span></span>
+            </a>
+          </div>
+
+          <div class="hero-service-grid">
+            <a class="hero-service-card hero-service-card--rentcar" href="#fleet">
+              <span class="hero-service-card__top">
+                <span class="hero-service-card__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                    <path d="M5 14.5L6.4 10.4A3 3 0 0 1 9.24 8.5H14.76A3 3 0 0 1 17.6 10.4L19 14.5"></path>
+                    <path d="M4.5 14.5H19.5V17A1.5 1.5 0 0 1 18 18.5H17A1 1 0 0 1 16 17.5V16.75H8V17.5A1 1 0 0 1 7 18.5H6A1.5 1.5 0 0 1 4.5 17Z"></path>
+                    <circle cx="7.5" cy="15.5" r="1"></circle>
+                    <circle cx="16.5" cy="15.5" r="1"></circle>
+                  </svg>
+                </span>
+              </span>
+              <strong data-i18n="serviceAirportTitle"><span class="copy-pair"><span class="copy-pair__primary">렌터카</span><span class="copy-pair__secondary">Rentcar</span></span></strong>
+              <span class="hero-service-card__lead" data-i18n="serviceAirportBody">자유여행 차량 예약</span>
+              <p data-i18n="serviceAirportNote">원하는 시간, 원하는 곳에서 편하게 이용하세요.</p>
+              <span class="hero-service-card__cta" data-i18n="serviceAirportCta">차량 보러가기</span>
+            </a>
+            <a class="hero-service-card hero-service-card--tour" href="./private-tour-request.html">
+              <span class="hero-service-card__top">
+                <span class="hero-service-card__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                    <circle cx="12" cy="8.25" r="3"></circle>
+                    <path d="M6.5 18.5A5.5 5.5 0 0 1 12 13A5.5 5.5 0 0 1 17.5 18.5"></path>
+                    <path d="M12 21L8.75 17.75"></path>
+                    <path d="M12 21L15.25 17.75"></path>
+                  </svg>
+                </span>
+              </span>
+              <strong data-i18n="serviceHotelTitle"><span class="copy-pair"><span class="copy-pair__primary">단독투어</span><span class="copy-pair__secondary">Private Tour</span></span></strong>
+              <span class="hero-service-card__lead" data-i18n="serviceHotelBody">기사 포함 편안한 이동</span>
+              <p data-i18n="serviceHotelNote">우리만의 일정으로 자유롭게 오키나와를 즐기세요.</p>
+              <span class="hero-service-card__cta" data-i18n="serviceHotelCta">투어 상세 보기</span>
+            </a>
+            <a class="hero-service-card hero-service-card--pickup" href="./tour-custom.html">
+              <span class="hero-service-card__top">
+                <span class="hero-service-card__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                    <path d="M4 12H20"></path>
+                    <path d="M12 4L20 12L12 20"></path>
+                    <path d="M4.5 6.5L8.5 6.5"></path>
+                  </svg>
+                </span>
+              </span>
+              <strong data-i18n="serviceFamilyTitle"><span class="copy-pair"><span class="copy-pair__primary">공항 · 골프장 픽드랍</span><span class="copy-pair__secondary">Airport · Golf Transfer</span></span></strong>
+              <span class="hero-service-card__lead" data-i18n="serviceFamilyBody">공항/골프장 이동 접수</span>
+              <p data-i18n="serviceFamilyNote">공항, 호텔, 골프장 이동 동선을 편하게 맞춰드립니다.</p>
+              <span class="hero-service-card__cta" data-i18n="serviceFamilyCta">상세페이지 보기</span>
+            </a>
+          </div>
+
+          <section class="reviews-section reviews-section--hero" id="reviews">
+            <div class="review-grid" id="reviewGrid"></div>
+            <div class="review-slider-dots" id="reviewSliderDots" aria-label="후기 슬라이드 선택"></div>
+          </section>
+        </div>
+
+        <aside class="hero-media">
+          <img
+            id="heroThemeImage"
+            src="./hero-main-clean.png"
+            alt="오키나와 바다 여행 무드의 메인 테마 이미지"
+            data-i18n-alt="heroImageAlt"
+          >
+        </aside>
+      </section>
+
+      <section class="tour-intro-section" id="tourIntro">
+        <div class="section-heading">
+          <p class="eyebrow">TOUR INTRO</p>
+          <h2 data-i18n="homeTourIntroTitle"><span class="copy-pair"><span class="copy-pair__primary">렌트카와 함께 보는 투어소개</span><span class="copy-pair__secondary">Tour ideas to pair with your rentcar</span></span></h2>
+          <p data-i18n="homeTourIntroBody">렌트카 일정에 자연스럽게 묶기 좋은 대표 투어와 액티비티를 먼저 소개해 드립니다.</p>
+        </div>
+        <div class="home-tour-intro-grid" id="homeTourIntroGrid"></div>
+        <div class="tour-intro-actions">
+          <a class="button primary" href="./tour.html" data-i18n="homeTourIntroPrimary"><span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">전체 투어상품 보기</span><span class="copy-pair__secondary">View All Tours</span></span></a>
+          <a class="button secondary" href="https://open.kakao.com/o/sWBHJKmi" data-i18n="homeTourIntroSecondary"><span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">투어 상담하기</span><span class="copy-pair__secondary">Tour Consultation</span></span></a>
+        </div>
+      </section>
+
+      <section class="fleet-section" id="fleet">
+        <div class="section-heading">
+          <p class="eyebrow">RECOMMENDED CARS</p>
+          <h2 data-i18n="fleetHeadingTitle"><span class="copy-pair"><span class="copy-pair__primary">차량 라인업</span><span class="copy-pair__secondary">Fleet Lineup</span></span></h2>
+          <p data-i18n="fleetHeadingBody">관리자 모드에서 차량 카드 내용을 직접 바꾸면 이 영역이 바로 갱신됩니다.</p>
+        </div>
+        <div class="fleet-grid" id="fleetGrid"></div>
+      </section>
+
+      <section class="simple-note-section">
+        <p class="simple-note" data-i18n="simpleNote"><span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">운전경력 2년이상</span><span class="copy-pair__secondary">2+ years driving experience</span></span></p>
+      </section>
+
+      <section class="calendar-section">
+        <div class="section-heading">
+          <p class="eyebrow">LIVE CALENDAR</p>
+          <h2 data-i18n="calendarHeadingTitle"><span class="copy-pair"><span class="copy-pair__primary">실시간 예약 캘린더</span><span class="copy-pair__secondary">Live Booking Calendar</span></span></h2>
+          <p data-i18n="calendarHeadingBody">차량별 예약 현황을 먼저 확인하고 원하는 일정을 선택한 뒤 예약으로 이어갈 수 있습니다.</p>
+        </div>
+        <div class="calendar-controls">
+          <label class="field" for="vehicleFilter">
+            <span data-i18n="vehicleFilterLabel"><span class="copy-pair"><span class="copy-pair__primary">차량별 일정 보기</span><span class="copy-pair__secondary">Filter by Vehicle</span></span></span>
+            <select id="vehicleFilter" name="vehicleFilter">
+              <option value="all" data-i18n="allVehiclesOption">전체 차량 보기</option>
+            </select>
+          </label>
+        </div>
+        <div class="calendar-shell">
+          <div id="bookingCalendar" aria-label="실시간 예약 캘린더" data-i18n-aria-label="bookingCalendarAria"></div>
+          <aside class="calendar-legend">
+            <h3 data-i18n="calendarLegendTitle"><span class="copy-pair"><span class="copy-pair__primary">캘린더 안내</span><span class="copy-pair__secondary">Calendar Guide</span></span></h3>
+            <div>
+              <span class="dot booked" aria-hidden="true"></span>
+              <span data-i18n="calendarLegendBooked">예약 완료된 일정</span>
+            </div>
+            <div>
+              <span class="dot selected" aria-hidden="true"></span>
+              <span data-i18n="calendarLegendSelected">현재 선택 차량 일정</span>
+            </div>
+            <p data-i18n="calendarLegendBody1">캘린더에서 기간을 드래그하면 아래 예약폼으로 날짜가 자동 입력됩니다.</p>
+            <p data-i18n="calendarLegendBody2">차량 필터를 선택하면 해당 차량 예약 현황만 따로 확인할 수 있습니다.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="reservation-section" id="reservation" hidden>
+        <div class="section-heading">
+          <h2 data-i18n="reservationHeadingTitle"><span class="copy-pair"><span class="copy-pair__primary">예약접수</span><span class="copy-pair__secondary">Reservation Form</span></span></h2>
+        </div>
+
+        <div class="reservation-layout">
+          <div>
+            <form id="reservationForm" class="reservation-form">
+              <input type="text" name="website" id="website" class="hidden-field" tabindex="-1" autocomplete="off">
+
+              <div class="field field-full" id="vehicleField">
+                <label for="vehicleId" data-i18n="vehicleLabel"><span class="copy-pair"><span class="copy-pair__primary">차량 선택</span><span class="copy-pair__secondary">Vehicle</span></span></label>
+                <select id="vehicleId" name="vehicleId" required></select>
+                <p class="field-help" id="vehicleFieldHelp">원하는 차량을 직접 선택할 수 있습니다.</p>
+              </div>
+
+              <div class="field-grid">
+                <div class="field">
+                  <label for="startDate" data-i18n="startDateLabel"><span class="copy-pair"><span class="copy-pair__primary">대여 시작일</span><span class="copy-pair__secondary">Start Date</span></span></label>
+                  <input id="startDate" name="startDate" type="date" required>
+                </div>
+                <div class="field">
+                  <label for="endDate" data-i18n="endDateLabel"><span class="copy-pair"><span class="copy-pair__primary">반납일</span><span class="copy-pair__secondary">Return Date</span></span></label>
+                  <input id="endDate" name="endDate" type="date" required>
+                </div>
+              </div>
+
+              <div class="field-grid">
+                <div class="field">
+                  <label for="childSeatCount" data-i18n="childSeatLabel"><span class="copy-pair"><span class="copy-pair__primary">카시트 수량</span><span class="copy-pair__secondary">Child Seat</span></span></label>
+                  <select id="childSeatCount" name="childSeatCount">
+                    <option value="0" data-i18n="childSeatOption0">선택 안 함</option>
+                    <option value="1" data-i18n="childSeatOption1">1개 무료</option>
+                    <option value="2" data-i18n="childSeatOption2">2개 (+1,000엔)</option>
+                    <option value="3" data-i18n="childSeatOption3">3개 (+2,000엔)</option>
+                    <option value="4" data-i18n="childSeatOption4">4개 (+3,000엔)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="babySeatCount" data-i18n="babySeatLabel"><span class="copy-pair"><span class="copy-pair__primary">베이비시트 수량</span><span class="copy-pair__secondary">Baby Seat</span></span></label>
+                  <select id="babySeatCount" name="babySeatCount">
+                    <option value="0" data-i18n="babySeatOption0">선택 안 함</option>
+                    <option value="1" data-i18n="babySeatOption1">1개 (1,500엔)</option>
+                    <option value="2" data-i18n="babySeatOption2">2개 (3,000엔)</option>
+                    <option value="3" data-i18n="babySeatOption3">3개 (4,500엔)</option>
+                  </select>
+                </div>
+              </div>
+
+              <section class="booking-total" id="bookingTotal">
+                <div class="booking-total__head">
+                  <span class="booking-total__label" data-i18n="bookingTotalLabel"><span class="copy-pair"><span class="copy-pair__primary">합계금액</span><span class="copy-pair__secondary">Estimated Total</span></span></span>
+                  <strong class="booking-total__value" id="bookingTotalValue">차량 선택 후 계산</strong>
+                </div>
+                <p class="booking-total__meta" id="bookingTotalMeta">차량과 날짜를 선택하면 예상 합계금액이 표시됩니다.</p>
+              </section>
+
+              <div class="reservation-entry-actions">
+                <p class="reservation-entry-note" data-i18n="reservationEntryGuide"><span class="copy-pair"><span class="copy-pair__primary">차량과 날짜를 선택한 뒤 예약하기 버튼을 누르면 접수 폼이 열립니다.</span><span class="copy-pair__secondary">After selecting vehicle and dates, press Book Now to open the intake form.</span></span></p>
+                <button class="button primary wide" id="reservationRevealButton" type="button" data-i18n="reservationRevealButton"><span class="copy-pair"><span class="copy-pair__primary">예약하기</span><span class="copy-pair__secondary">Book Now</span></span></button>
+              </div>
+
+              <section class="reservation-intake-panel" id="reservationIntakePanel" hidden>
+                <div class="reservation-intake-panel__head">
+                  <strong data-i18n="reservationIntakeTitle"><span class="copy-pair"><span class="copy-pair__primary">예약자 정보 입력</span><span class="copy-pair__secondary">Traveler Details</span></span></strong>
+                  <p data-i18n="reservationIntakeBody">선택한 일정으로 접수를 진행할 수 있도록 고객 정보와 요청사항을 입력해 주세요.</p>
+                </div>
+
+                <div class="field-grid">
+                  <div class="field">
+                    <label for="name" data-i18n="nameLabel"><span class="copy-pair"><span class="copy-pair__primary">고객명</span><span class="copy-pair__secondary">Full Name</span></span></label>
+                    <input id="name" name="name" type="text" required>
+                  </div>
+                  <div class="field">
+                    <label for="phone" data-i18n="phoneLabel"><span class="copy-pair"><span class="copy-pair__primary">연락처</span><span class="copy-pair__secondary">Phone</span></span></label>
+                    <input id="phone" name="phone" type="tel" placeholder="010-0000-0000" data-i18n-placeholder="phonePlaceholder" required>
+                  </div>
+                </div>
+
+                <div class="field-grid">
+                  <div class="field">
+                    <label for="email" data-i18n="emailLabel"><span class="copy-pair"><span class="copy-pair__primary">이메일</span><span class="copy-pair__secondary">Email</span></span></label>
+                    <input id="email" name="email" type="email" required>
+                  </div>
+                  <div class="field">
+                    <label for="pickup" data-i18n="pickupLabel"><span class="copy-pair"><span class="copy-pair__primary">인수 장소</span><span class="copy-pair__secondary">Pickup Location</span></span></label>
+                    <select id="pickup" name="pickup" required>
+                      <option value="나하공항" data-i18n="pickupOptionAirport">나하공항</option>
+                      <option value="나하시내호텔" data-i18n="pickupOptionHotel">나하시내 호텔</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="field-grid">
+                  <div class="field">
+                    <label for="dropoff" data-i18n="dropoffLabel"><span class="copy-pair"><span class="copy-pair__primary">반납 장소</span><span class="copy-pair__secondary">Return Location</span></span></label>
+                    <select id="dropoff" name="dropoff" required>
+                      <option value="나하공항" data-i18n="dropoffOptionAirport">나하공항</option>
+                      <option value="나하시내호텔" data-i18n="dropoffOptionHotel">나하시내 호텔</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="passengers" data-i18n="passengersLabel"><span class="copy-pair"><span class="copy-pair__primary">탑승 인원</span><span class="copy-pair__secondary">Passengers</span></span></label>
+                    <input id="passengers" name="passengers" type="number" min="1" max="15" required>
+                  </div>
+                </div>
+
+                <div class="field-grid">
+                  <div class="field">
+                    <label for="flightNumber" data-i18n="flightNumberLabel"><span class="copy-pair"><span class="copy-pair__primary">항공편 / 요청 코드</span><span class="copy-pair__secondary">Flight / Request Code</span></span></label>
+                    <input id="flightNumber" name="flightNumber" type="text" placeholder="예: KE123" data-i18n-placeholder="flightPlaceholder">
+                  </div>
+                </div>
+
+                <div class="field field-full">
+                  <label for="message" data-i18n="messageLabel"><span class="copy-pair"><span class="copy-pair__primary">추가 요청사항</span><span class="copy-pair__secondary">Special Requests</span></span></label>
+                  <textarea id="message" name="message" rows="4" placeholder="카시트 수량, 골프백 수량, 기사 요청 여부 등" data-i18n-placeholder="messagePlaceholder"></textarea>
+                </div>
+
+                <label class="check-row">
+                  <input id="agree" name="agree" type="checkbox" required>
+                  <span data-i18n="agreeText">예약 정보 저장 및 예약 진행 연락에 동의합니다.</span>
+                </label>
+
+                <button class="button primary wide" id="submitButton" type="submit" data-i18n="submitButton"><span class="copy-pair"><span class="copy-pair__primary">예약 저장 및 메일 발송</span><span class="copy-pair__secondary">Save Booking & Send Mail</span></span></button>
+              </section>
+
+              <p class="form-status" id="formStatus">차량과 날짜를 선택하면 예약 가능 여부를 먼저 확인합니다.</p>
+            </form>
+
+            <section class="result-card" id="reservationResult" hidden>
+              <p class="eyebrow">BOOKING COMPLETE</p>
+              <h3 id="resultTitle">예약이 접수되었습니다.</h3>
+              <p id="resultBody">예약 저장 후 안내 정보가 이 영역에 표시됩니다.</p>
+            </section>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="site-footer site-footer--modern">
+      <div class="site-footer__panel">
+        <section class="site-footer__company">
+          <img class="site-footer__company-name" src="./footer-company-name-white.png" alt="주식회사 밥밥">
+          <div class="site-footer__legal-links">
+            <a href="./privacy.html">개인정보취급방침</a>
+            <span>|</span>
+            <a href="./terms.html">이용약관</a>
+            <span>|</span>
+            <a href="https://open.kakao.com/o/sWBHJKmi">문의하기</a>
+          </div>
+          <div class="site-footer__company-meta">
+            <p>상호명 : 株式会社パップパップ</p>
+            <p>사업자등록번호 : 3600-01-023825</p>
+            <p>대표이사 : 류청도</p>
+            <p><a href="mailto:pabpab8628@yahoo.co.jp">pabpab8628@yahoo.co.jp</a> · <a href="https://open.kakao.com/o/sWBHJKmi">카카오톡 상담</a></p>
+          </div>
+        </section>
+
+        <section class="site-footer__brands">
+          <div class="site-footer__brands-head">
+            <h3>Brand</h3>
+            <p>株式会社パップパップ 운영 브랜드</p>
+          </div>
+          <div class="site-footer__brand-grid">
+            <a class="site-footer__brand-card" href="https://www.ryu-t.com/">
+              <span class="site-footer__brand-card-visual">
+                <img src="./pabtour-bapbap-logo.png" alt="밥밥 브랜드 로고">
+              </span>
+              <span class="site-footer__brand-card-copy">
+                <strong>밥밥</strong>
+                <span>Authentic Korean Restaurant in Okinawa</span>
+              </span>
+            </a>
+            <a class="site-footer__brand-card" href="./tour.html">
+              <span class="site-footer__brand-card-visual">
+                <img src="./PAB-TOUR LOGO.jpg" alt="PAB-TOUR logo">
+              </span>
+              <span class="site-footer__brand-card-copy">
+                <strong>PAB-TOUR</strong>
+                <span>Private Okinawa Travel</span>
+              </span>
+            </a>
+            <a class="site-footer__brand-card" href="./index.html">
+              <span class="site-footer__brand-card-visual">
+                <img src="./okioki.png.png" alt="OKIOKI RENT A CAR logo">
+              </span>
+              <span class="site-footer__brand-card-copy">
+                <strong>OKIOKI RENT A CAR</strong>
+                <span>Okinawa Rental Car Service</span>
+              </span>
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <div class="site-footer__bottom">
+        <span>Copyright © 株式会社パップパップ. All rights reserved.</span>
+      </div>
+    </footer>
+  </div>
+
+  <div class="admin-modal" id="adminModal" hidden>
+    <div class="admin-backdrop" data-close-admin></div>
+    <div class="admin-sheet">
+      <button class="admin-close" type="button" data-close-admin>닫기</button>
+      <div class="admin-auth" id="adminAuthSection">
+        <p class="eyebrow">HIDDEN ADMIN MODE</p>
+        <h3>관리자 인증</h3>
+        <p>브랜드 로고를 여러 번 눌러 들어온 숨김 관리자 모드입니다. Netlify 환경변수 `ADMIN_SECRET` 과 같은 비밀번호를 입력하면 편집할 수 있습니다.</p>
+        <div class="admin-auth-row">
+          <input id="adminSecretInput" type="password" placeholder="관리자 비밀번호">
+          <button class="button primary" id="adminLoginButton" type="button">열기</button>
+        </div>
+        <p class="admin-status" id="adminStatus">차량 카드와 옵션을 편집하려면 관리자 인증이 필요합니다.</p>
+      </div>
+
+      <div class="admin-editor" id="adminEditorSection" hidden>
+        <div class="admin-section-head">
+          <div>
+            <p class="eyebrow">ADMIN EDITOR</p>
+            <h3>차량 카드, 옵션, 사이트 설정 편집</h3>
+          </div>
+          <button class="button secondary" id="adminLogoutButton" type="button">잠금</button>
+        </div>
+
+        <section class="admin-block">
+          <div class="admin-block-head">
+            <h4>사이트 공통 설정</h4>
+          </div>
+          <div id="adminSiteSettings" class="admin-list"></div>
+        </section>
+
+        <section class="admin-block">
+          <div class="admin-block-head">
+            <h4>차량 카드</h4>
+            <button class="button secondary" id="addVehicleButton" type="button">차량 추가</button>
+          </div>
+          <div id="adminVehicleList" class="admin-list"></div>
+        </section>
+
+        <section class="admin-block">
+          <div class="admin-block-head">
+            <h4>옵션 카드</h4>
+            <button class="button secondary" id="addOptionButton" type="button">옵션 추가</button>
+          </div>
+          <div id="adminOptionList" class="admin-list"></div>
+        </section>
+
+        <section class="admin-block">
+          <div class="admin-block-head">
+            <h4>투어 상품</h4>
+            <button class="button secondary" id="addTourProductButton" type="button">투어 추가</button>
+          </div>
+          <div id="adminTourProductList" class="admin-list"></div>
+        </section>
+
+        <section class="admin-block">
+          <div class="admin-block-head">
+            <h4>투어 안내 카드</h4>
+            <button class="button secondary" id="addSupportCardButton" type="button">안내 카드 추가</button>
+          </div>
+          <div id="adminSupportCardList" class="admin-list"></div>
+        </section>
+
+        <section class="admin-block">
+          <div class="admin-block-head">
+            <h4>액티비티 카드</h4>
+            <button class="button secondary" id="addActivityProductButton" type="button">액티비티 추가</button>
+          </div>
+          <div id="adminActivityProductList" class="admin-list"></div>
+        </section>
+
+        <section class="admin-block">
+          <div class="admin-block-head">
+            <h4>액티비티 상세</h4>
+            <button class="button secondary" id="addActivityDetailButton" type="button">상세 추가</button>
+          </div>
+          <div id="adminActivityDetailList" class="admin-list"></div>
+        </section>
+
+        <div class="admin-save-row">
+          <button class="button primary" id="saveCatalogButton" type="button">변경 저장</button>
+          <p class="admin-status" id="adminSaveStatus">저장 후 렌트카, 투어, 액티비티, 사이트 이미지 설정이 함께 반영됩니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+  <script src="./config.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
+
 
