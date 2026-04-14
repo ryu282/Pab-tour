@@ -1,0 +1,13 @@
+{
+  "name": "rentcar-netlify",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Rental car homepage for Netlify with EmailJS and live booking calendar",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo Static site ready for Netlify"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}

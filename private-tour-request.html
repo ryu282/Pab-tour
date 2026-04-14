@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ko" data-lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>okioki rent a car | 단독투어 상세 소개</title>
+  <meta name="description" content="우리 일행만을 위한 오키나와 프라이빗 단독투어 소개 페이지입니다.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Outfit:wght@400;500;600;700;800&family=SUIT:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    .tour-detail-page { padding: 32px 32px 72px; display: grid; gap: 24px; }
+    .tour-detail-panel, .tour-detail-slot, .tour-guide-card, .tour-region-card, .tour-detail-inclusion-card { background: rgba(255,255,255,0.94); border: 1px solid rgba(165,186,213,0.26); box-shadow: 0 22px 48px rgba(15,31,54,0.09); border-radius: 28px; }
+    .tour-detail-panel { padding: 28px; display: grid; gap: 18px; }
+    .tour-detail-hero { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 22px; align-items: stretch; }
+    .tour-detail-copy { display: grid; gap: 14px; align-content: start; }
+    .tour-detail-copy h1, .tour-detail-slot h2, .tour-guide-card h3, .tour-region-card h3, .tour-detail-inclusion-card h3 { margin: 0; letter-spacing: -0.04em; color: #163255; }
+    .tour-detail-copy p, .tour-detail-slot p, .tour-guide-card p, .tour-region-card p { margin: 0; color: #58708e; line-height: 1.8; }
+    .tour-detail-badge { display: inline-flex; width: fit-content; min-height: 36px; align-items: center; padding: 0 14px; border-radius: 999px; background: #1f5ea8; color: #fff; font-weight: 800; }
+    .tour-detail-visual { overflow: hidden; border-radius: 24px; min-height: 320px; background: linear-gradient(180deg, #f7fbff, #eaf2ff); border: 1px solid rgba(179,198,226,0.4); box-shadow: 0 18px 36px rgba(19,45,79,0.08); }
+    .tour-detail-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .tour-guide-grid, .tour-detail-inclusion-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .tour-guide-card, .tour-detail-inclusion-card { padding: 24px; display: grid; gap: 14px; align-content: start; }
+    .tour-guide-label, .tour-region-badge { display: inline-flex; width: fit-content; padding: 7px 12px; border-radius: 999px; background: rgba(31,94,168,0.1); color: #1f5ea8; font-size: 0.9rem; font-weight: 800; letter-spacing: 0.04em; }
+    .tour-detail-list { margin: 0; padding-left: 20px; color: #38516f; line-height: 1.74; }
+    .tour-detail-list li + li { margin-top: 6px; }
+    .tour-detail-slot { padding: 24px; display: grid; gap: 14px; }
+    .tour-region-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .tour-region-card { overflow: hidden; display: grid; text-decoration: none; }
+    .tour-region-card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+    .tour-region-card__body { padding: 20px; display: grid; gap: 12px; }
+    .tour-region-card__cta { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; width: fit-content; padding: 0 16px; border-radius: 999px; background: #1f5ea8; color: #fff; font-weight: 800; text-decoration: none; }
+    .tour-action-row { display: flex; gap: 12px; flex-wrap: wrap; padding-top: 6px; }
+    .tour-action-button { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 24px; border-radius: 999px; background: linear-gradient(135deg, #1f76ff, #0f5ed8); color: #fff; font-weight: 800; text-decoration: none; box-shadow: 0 16px 30px rgba(31,118,255,0.24); }
+    .tour-action-button.secondary { background: #edf4ff; color: #235cb0; box-shadow: none; }
+    @media (max-width: 960px) { .tour-detail-page { padding: 18px 18px 56px; } .tour-detail-hero, .tour-guide-grid, .tour-region-grid, .tour-detail-inclusion-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="page-bg" id="pageBg"></div>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="./index.html">
+        <img class="brand-logo" src="./okioki.png.png" alt="okioki rent a car logo">
+        <span><strong>okioki rent a car</strong><small data-i18n="brandSub">Private Tour</small></span>
+      </a>
+      <div class="topbar-tools">
+        <nav class="nav" data-i18n-aria-label="navAria">
+          <a href="./index.html" data-i18n="navHome">홈</a>
+          <a href="./tour.html" data-i18n="navTour">투어상품</a>
+          <a href="./tour-custom.html" data-i18n="navTransfer">픽/드랍서비스</a>
+        </nav>
+        <div class="lang-switcher" role="group" aria-label="언어 선택">
+          <button class="lang-switcher__button is-active" type="button" data-lang-button="kr" aria-pressed="true">KR</button>
+          <button class="lang-switcher__button" type="button" data-lang-button="jp" aria-pressed="false">JP</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="tour-detail-page">
+      <section class="tour-detail-panel tour-detail-hero">
+        <div class="tour-detail-copy">
+          <span class="tour-detail-badge" data-i18n="badge">단독투어</span>
+          <h1 data-i18n="title">단독투어 상세 소개</h1>
+          <p data-i18n="hero1">우리 일행만을 위한 일정으로 오키나와를 편안하게 이동하며 즐기는 프라이빗 투어입니다.</p>
+          <p data-i18n="hero2">한국인 차량가이드가 동행하여 한국어로 설명해드리며, 고객의 여행 스타일과 요청에 맞춰 유연하게 일정이 운영됩니다.</p>
+          <div class="tour-action-row">
+            <a class="tour-action-button" href="./tour-booking-request.html?tour=private" data-i18n="applyBtn">신청하기</a>
+            <a class="tour-action-button secondary" href="./tour.html" data-i18n="tourBtn">투어상품 보기</a>
+          </div>
+        </div>
+        <div class="tour-detail-visual">
+          <img src="./custom-private-transfer-card.png" data-i18n-alt="heroAlt" alt="단독투어 대표 이미지">
+        </div>
+      </section>
+
+      <section class="tour-detail-slot">
+        <h2 data-i18n="serviceTitle">서비스 개요</h2>
+        <div class="tour-guide-grid">
+          <article class="tour-guide-card">
+            <span class="tour-guide-label" data-i18n="labelIntro">한줄 소개</span>
+            <h3 data-i18n="introTitle">우리만의 일정으로 편안하게 이동</h3>
+            <p data-i18n="introBody">우리 일행만을 위한 일정으로 오키나와를 편안하게 이동하며 즐기는 프라이빗 투어입니다.</p>
+          </article>
+          <article class="tour-guide-card">
+            <span class="tour-guide-label" data-i18n="labelOverview">서비스 개요</span>
+            <h3 data-i18n="overviewTitle">타인과 함께하지 않는 단독 일정</h3>
+            <p data-i18n="overviewBody1">본 투어는 타인과 함께하지 않는 단독 일정으로 진행됩니다.</p>
+            <p data-i18n="overviewBody2">정해진 코스를 따라 이동하는 일반 투어와 달리 고객의 여행 스타일과 요청에 맞춰 유연하게 일정이 운영됩니다.</p>
+          </article>
+          <article class="tour-guide-card">
+            <span class="tour-guide-label" data-i18n="labelMove">이동 방식</span>
+            <h3 data-i18n="moveTitle">차량·기사·한국인 가이드 동행</h3>
+            <p data-i18n="moveBody1">전용 차량, 기사, 한국인 차량가이드가 함께하며 숙소 기준 픽업부터 종료까지 편안하게 이동합니다.</p>
+            <p data-i18n="moveBody2">운전에 대한 부담 없이 이동 시간과 동선을 효율적으로 활용할 수 있습니다.</p>
+          </article>
+          <article class="tour-guide-card">
+            <span class="tour-guide-label" data-i18n="labelSchedule">일정 운영</span>
+            <h3 data-i18n="scheduleTitle">기본 코스 + 유연한 조정</h3>
+            <p data-i18n="scheduleBody1">기본 코스를 기준으로 진행되며 당일 상황 및 고객 요청에 따라 일정 조정이 가능합니다.</p>
+            <p data-i18n="scheduleBody2">체류 시간, 방문 순서, 일부 코스 변경 등 유연하게 대응됩니다.</p>
+          </article>
+          <article class="tour-guide-card">
+            <span class="tour-guide-label" data-i18n="labelDiff">이런 점이 다릅니다</span>
+            <h3 data-i18n="diffTitle">우리 일정에 맞춘 이동</h3>
+            <ul class="tour-detail-list">
+              <li data-i18n="diff1">불필요한 대기 없이 우리 일정에 맞춰 이동합니다.</li>
+              <li data-i18n="diff2">여행 중 컨디션이나 상황에 따라 속도를 조절할 수 있습니다.</li>
+              <li data-i18n="diff3">관광지 간 이동 스트레스를 줄이고 여행 자체에 집중할 수 있습니다.</li>
+            </ul>
+          </article>
+          <article class="tour-guide-card">
+            <span class="tour-guide-label" data-i18n="labelTarget">추천 대상</span>
+            <h3 data-i18n="targetTitle">가족 / 부모님 / 소규모 여행</h3>
+            <ul class="tour-detail-list">
+              <li data-i18n="target1">가족 단위 여행</li>
+              <li data-i18n="target2">부모님 동반 여행</li>
+              <li data-i18n="target3">커플 및 소규모 여행</li>
+              <li data-i18n="target4">렌터카 이용이 부담스러운 분</li>
+              <li data-i18n="target5">이동을 편하게 해결하고 싶은 분</li>
+            </ul>
+          </article>
+        </div>
+        <p data-i18n="scheduleNotice">※ 일정은 예시이며 당일 상황에 따라 일부 변경될 수 있습니다.</p>
+        <p><strong data-i18n="coreLabel">핵심 안내</strong> <span data-i18n="coreBody">렌터카 없이 오키나와를 가장 편하게 여행하는 방법입니다.</span></p>
+        <p><strong data-i18n="refLabel">참고 사항</strong> <span data-i18n="refBody">인원 및 요청에 따라 맞춤 진행됩니다.</span></p>
+      </section>
+
+      <section class="tour-detail-slot">
+        <h2 data-i18n="includeTitle">포함 / 불포함 사항</h2>
+        <div class="tour-detail-inclusion-grid">
+          <article class="tour-detail-inclusion-card">
+            <h3 data-i18n="includedLabel">포함 사항</h3>
+            <ul class="tour-detail-list">
+              <li data-i18n="included1">전용 차량</li>
+              <li data-i18n="included2">기사</li>
+              <li data-i18n="included3">한국인 차량가이드</li>
+              <li data-i18n="included4">숙소 기준 픽업 및 드롭</li>
+              <li data-i18n="included5">기본 여행 안내 지원</li>
+              <li data-i18n="included6">일정 운영 및 이동 서비스</li>
+            </ul>
+          </article>
+          <article class="tour-detail-inclusion-card">
+            <h3 data-i18n="excludedLabel">불포함 사항</h3>
+            <ul class="tour-detail-list">
+              <li data-i18n="excluded1">관광지 입장료</li>
+              <li data-i18n="excluded2">식사 및 음료 비용</li>
+              <li data-i18n="excluded3">개인 경비</li>
+              <li data-i18n="excluded4">기타 선택 비용</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="tour-detail-slot">
+        <h2 data-i18n="regionTitle">지역별 대표 단독투어</h2>
+        <p data-i18n="regionLead">북부, 중부, 남부 대표 코스를 바로 확인할 수 있습니다.</p>
+        <div class="tour-region-grid">
+          <a class="tour-region-card" href="./tour-north.html">
+            <img src="./north-private-page-card.png" data-i18n-alt="regionAltNorth" alt="북부투어">
+            <div class="tour-region-card__body">
+              <span class="tour-region-badge" data-i18n="regionBadgeNorth">북부</span>
+              <h3 data-i18n="regionNorthTitle">북부투어</h3>
+              <p data-i18n="regionNorthBody">만좌모, 고우리섬, 츄라우미수족관을 묶어 북부 핵심 포인트를 하루에 편하게 둘러보는 코스입니다.</p>
+              <span class="tour-region-card__cta" data-i18n="regionCtaNorth">북부투어 보기</span>
+            </div>
+          </a>
+          <a class="tour-region-card" href="./tour-central.html">
+            <img src="./central-drive-card.jpg" data-i18n-alt="regionAltCentral" alt="중부투어">
+            <div class="tour-region-card__body">
+              <span class="tour-region-badge" data-i18n="regionBadgeCentral">중부</span>
+              <h3 data-i18n="regionCentralTitle">중부투어</h3>
+              <p data-i18n="regionCentralBody">해중도로, 하마히가섬, 이케이지마를 중심으로 중부 감성 드라이브를 즐기는 코스입니다.</p>
+              <span class="tour-region-card__cta" data-i18n="regionCtaCentral">중부투어 보기</span>
+            </div>
+          </a>
+          <a class="tour-region-card" href="./tour-south.html">
+            <img src="./south-healing-card.jpg" data-i18n-alt="regionAltSouth" alt="남부투어">
+            <div class="tour-region-card__body">
+              <span class="tour-region-badge" data-i18n="regionBadgeSouth">남부</span>
+              <h3 data-i18n="regionSouthTitle">남부투어</h3>
+              <p data-i18n="regionSouthBody">니라이카나이 대교, 오키나와월드, 세나가지마까지 남부 대표 포인트를 편하게 이동하는 코스입니다.</p>
+              <span class="tour-region-card__cta" data-i18n="regionCtaSouth">남부투어 보기</span>
+            </div>
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const LANGUAGE_STORAGE_KEY = "rentcarPublicLanguageV1";
+    const COPY = {
+      kr: {
+        pageTitle: "okioki rent a car | 단독투어 상세 소개",
+        metaDescription: "우리 일행만을 위한 오키나와 프라이빗 단독투어 소개 페이지입니다.",
+        brandSub: "Private Tour",
+        navAria: "주요 메뉴",
+        navHome: "홈",
+        navTour: "투어상품",
+        navTransfer: "픽/드랍서비스",
+        badge: "단독투어",
+        title: "단독투어 상세 소개",
+        hero1: "우리 일행만을 위한 일정으로 오키나와를 편안하게 이동하며 즐기는 프라이빗 투어입니다.",
+        hero2: "한국인 차량가이드가 동행하여 한국어로 설명해드리며, 고객의 여행 스타일과 요청에 맞춰 유연하게 일정이 운영됩니다.",
+        applyBtn: "신청하기",
+        tourBtn: "투어상품 보기",
+        heroAlt: "단독투어 대표 이미지",
+        serviceTitle: "서비스 개요",
+        labelIntro: "한줄 소개",
+        introTitle: "우리만의 일정으로 편안하게 이동",
+        introBody: "우리 일행만을 위한 일정으로 오키나와를 편안하게 이동하며 즐기는 프라이빗 투어입니다.",
+        labelOverview: "서비스 개요",
+        overviewTitle: "타인과 함께하지 않는 단독 일정",
+        overviewBody1: "본 투어는 타인과 함께하지 않는 단독 일정으로 진행됩니다.",
+        overviewBody2: "정해진 코스를 따라 이동하는 일반 투어와 달리 고객의 여행 스타일과 요청에 맞춰 유연하게 일정이 운영됩니다.",
+        labelMove: "이동 방식",
+        moveTitle: "차량·기사·한국인 가이드 동행",
+        moveBody1: "전용 차량, 기사, 한국인 차량가이드가 함께하며 숙소 기준 픽업부터 종료까지 편안하게 이동합니다.",
+        moveBody2: "운전에 대한 부담 없이 이동 시간과 동선을 효율적으로 활용할 수 있습니다.",
+        labelSchedule: "일정 운영",
+        scheduleTitle: "기본 코스 + 유연한 조정",
+        scheduleBody1: "기본 코스를 기준으로 진행되며 당일 상황 및 고객 요청에 따라 일정 조정이 가능합니다.",
+        scheduleBody2: "체류 시간, 방문 순서, 일부 코스 변경 등 유연하게 대응됩니다.",
+        scheduleNotice: "※ 일정은 예시이며 당일 상황에 따라 일부 변경될 수 있습니다.",
+        labelDiff: "이런 점이 다릅니다",
+        diffTitle: "우리 일정에 맞춘 이동",
+        diff1: "불필요한 대기 없이 우리 일정에 맞춰 이동합니다.",
+        diff2: "여행 중 컨디션이나 상황에 따라 속도를 조절할 수 있습니다.",
+        diff3: "관광지 간 이동 스트레스를 줄이고 여행 자체에 집중할 수 있습니다.",
+        labelTarget: "추천 대상",
+        targetTitle: "가족 / 부모님 / 소규모 여행",
+        target1: "가족 단위 여행",
+        target2: "부모님 동반 여행",
+        target3: "커플 및 소규모 여행",
+        target4: "렌터카 이용이 부담스러운 분",
+        target5: "이동을 편하게 해결하고 싶은 분",
+        coreLabel: "핵심 안내",
+        coreBody: "렌터카 없이 오키나와를 가장 편하게 여행하는 방법입니다.",
+        refLabel: "참고 사항",
+        refBody: "인원 및 요청에 따라 맞춤 진행됩니다.",
+        includeTitle: "포함 / 불포함 사항",
+        includedLabel: "포함 사항",
+        included1: "전용 차량",
+        included2: "기사",
+        included3: "한국인 차량가이드",
+        included4: "숙소 기준 픽업 및 드롭",
+        included5: "기본 여행 안내 지원",
+        included6: "일정 운영 및 이동 서비스",
+        excludedLabel: "불포함 사항",
+        excluded1: "관광지 입장료",
+        excluded2: "식사 및 음료 비용",
+        excluded3: "개인 경비",
+        excluded4: "기타 선택 비용",
+        regionTitle: "지역별 대표 단독투어",
+        regionLead: "북부, 중부, 남부 대표 코스를 바로 확인할 수 있습니다.",
+        regionBadgeNorth: "북부",
+        regionNorthTitle: "북부투어",
+        regionNorthBody: "만좌모, 고우리섬, 츄라우미수족관을 묶어 북부 핵심 포인트를 하루에 편하게 둘러보는 코스입니다.",
+        regionCtaNorth: "북부투어 보기",
+        regionBadgeCentral: "중부",
+        regionCentralTitle: "중부투어",
+        regionCentralBody: "해중도로, 하마히가섬, 이케이지마를 중심으로 중부 감성 드라이브를 즐기는 코스입니다.",
+        regionCtaCentral: "중부투어 보기",
+        regionBadgeSouth: "남부",
+        regionSouthTitle: "남부투어",
+        regionSouthBody: "니라이카나이 대교, 오키나와월드, 세나가지마까지 남부 대표 포인트를 편하게 이동하는 코스입니다.",
+        regionCtaSouth: "남부투어 보기",
+        regionAltNorth: "북부투어",
+        regionAltCentral: "중부투어",
+        regionAltSouth: "남부투어"
+      },
+      jp: {
+        pageTitle: "okioki rent a car | プライベートツアー詳細紹介",
+        metaDescription: "ご一行様だけの沖縄プライベート単独ツアー紹介ページです。",
+        brandSub: "Private Tour",
+        navAria: "メインメニュー",
+        navHome: "ホーム",
+        navTour: "ツアー商品",
+        navTransfer: "送迎サービス",
+        badge: "プライベートツアー",
+        title: "プライベートツアー詳細紹介",
+        hero1: "ご一行様だけのスケジュールで沖縄を快適に移動しながら楽しめるプライベートツアーです。",
+        hero2: "韓国人車両ガイドが同行し韓国語でご案内します。お客様の旅行スタイルとご要望に合わせて柔軟に日程を運営します。",
+        applyBtn: "申し込む",
+        tourBtn: "ツアー商品を見る",
+        heroAlt: "プライベートツアーのメインイメージ",
+        serviceTitle: "サービス概要",
+        labelIntro: "一言紹介",
+        introTitle: "私たちだけの日程で快適に移動",
+        introBody: "ご一行様だけのスケジュールで沖縄を快適に移動しながら楽しめるプライベートツアーです。",
+        labelOverview: "サービス概要",
+        overviewTitle: "他のお客様と一緒にならない単独日程",
+        overviewBody1: "本ツアーは他のお客様と一緒にならない単独日程で進行します。",
+        overviewBody2: "決まったコースを移動する一般ツアーとは異なり、お客様の旅行スタイルとご要望に合わせて柔軟に日程を運営します。",
+        labelMove: "移動方式",
+        moveTitle: "車両・ドライバー・韓国人ガイド同行",
+        moveBody1: "専用車両、ドライバー、韓国人車両ガイドが同行し、宿泊先基準のピックアップから終了まで快適に移動します。",
+        moveBody2: "運転の負担なく、移動時間と動線を効率的に活用できます。",
+        labelSchedule: "日程運営",
+        scheduleTitle: "基本コース + 柔軟な調整",
+        scheduleBody1: "基本コースを基準に進行し、当日の状況やお客様のご要望に応じて日程調整が可能です。",
+        scheduleBody2: "滞在時間、訪問順序、一部コース変更など柔軟に対応します。",
+        scheduleNotice: "※ 日程は一例であり、当日の状況により一部変更される場合があります。",
+        labelDiff: "このような点が違います",
+        diffTitle: "私たちの日程に合わせた移動",
+        diff1: "不要な待機なく、私たちの日程に合わせて移動します。",
+        diff2: "旅行中の体調や状況に応じてスピードを調整できます。",
+        diff3: "観光地間の移動ストレスを減らし、旅行そのものに集中できます。",
+        labelTarget: "おすすめ対象",
+        targetTitle: "家族 / ご両親 / 少人数旅行",
+        target1: "家族旅行",
+        target2: "ご両親同伴旅行",
+        target3: "カップルおよび少人数旅行",
+        target4: "レンタカー利用が負担な方",
+        target5: "移動を楽に解決したい方",
+        coreLabel: "核心案内",
+        coreBody: "レンタカーなしで沖縄を最も快適に旅行する方法です。",
+        refLabel: "参考事項",
+        refBody: "人数およびご要望に応じてカスタム進行します。",
+        includeTitle: "含まれるもの / 含まれないもの",
+        includedLabel: "含まれるもの",
+        included1: "専用車両",
+        included2: "ドライバー",
+        included3: "韓国人車両ガイド",
+        included4: "宿泊先基準のピックアップ / ドロップ",
+        included5: "基本旅行案内サポート",
+        included6: "日程運営および移動サービス",
+        excludedLabel: "含まれないもの",
+        excluded1: "観光地入場料",
+        excluded2: "食事および飲み物代",
+        excluded3: "個人経費",
+        excluded4: "その他選択費用",
+        regionTitle: "地域別代表プライベートツアー",
+        regionLead: "北部、中部、南部代表コースをすぐに確認できます。",
+        regionBadgeNorth: "北部",
+        regionNorthTitle: "北部ツアー",
+        regionNorthBody: "万座毛、古宇利島、美ら海水族館をまとめて北部の核心ポイントを1日で快適に巡るコースです。",
+        regionCtaNorth: "北部ツアーを見る",
+        regionBadgeCentral: "中部",
+        regionCentralTitle: "中部ツアー",
+        regionCentralBody: "海中道路、浜比嘉島、伊計島を中心に中部感性ドライブを楽しむコースです。",
+        regionCtaCentral: "中部ツアーを見る",
+        regionBadgeSouth: "南部",
+        regionSouthTitle: "南部ツアー",
+        regionSouthBody: "ニライカナイ橋、沖縄ワールド、瀬長島まで南部代表ポイントを快適に移動するコースです。",
+        regionCtaSouth: "南部ツアーを見る",
+        regionAltNorth: "北部ツアー",
+        regionAltCentral: "中部ツアー",
+        regionAltSouth: "南部ツアー"
+      }
+    };
+
+    const descriptionMeta = document.querySelector('meta[name="description"]');
+    const langButtons = Array.from(document.querySelectorAll("[data-lang-button]"));
+
+    function getLanguage() {
+      return window.localStorage.getItem(LANGUAGE_STORAGE_KEY) === "jp" ? "jp" : "kr";
+    }
+
+    function applyLanguage(nextLanguage) {
+      const copy = COPY[nextLanguage];
+      document.documentElement.lang = nextLanguage === "jp" ? "ja" : "ko";
+      document.documentElement.setAttribute("data-lang", nextLanguage);
+      document.title = copy.pageTitle;
+      if (descriptionMeta) descriptionMeta.content = copy.metaDescription;
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const key = element.dataset.i18n;
+        if (key in copy) element.textContent = copy[key];
+      });
+      document.querySelectorAll("[data-i18n-alt]").forEach((element) => {
+        const key = element.dataset.i18nAlt;
+        if (key in copy) element.alt = copy[key];
+      });
+      document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+        const key = element.dataset.i18nAriaLabel;
+        if (key in copy) element.setAttribute("aria-label", copy[key]);
+      });
+      langButtons.forEach((button) => {
+        const active = button.dataset.langButton === nextLanguage;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+    }
+
+    applyLanguage(getLanguage());
+
+    langButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const nextLanguage = button.dataset.langButton;
+        if (!nextLanguage || nextLanguage === document.documentElement.getAttribute("data-lang")) return;
+        window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
+        applyLanguage(nextLanguage);
+      });
+    });
+  </script>
+</body>
+</html>
