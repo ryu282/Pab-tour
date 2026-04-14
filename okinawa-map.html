@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="ko" data-lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>okioki rent a car | 오키나와 관광지도</title>
+  <meta name="description" content="오키나와 렌트카 여행에 바로 활용할 수 있는 지역별 관광 포인트와 주요 이동 동선을 한눈에 정리한 지도 페이지입니다.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Outfit:wght@400;500;600;700;800&family=SUIT:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    .okinawa-map-page {
+      display: grid;
+      gap: 24px;
+      padding: 32px 32px 72px;
+      color: #10294b;
+    }
+
+    .okinawa-map-hero,
+    .map-card,
+    .area-grid article,
+    .area-section {
+      border-radius: 30px;
+      border: 1px solid rgba(165, 186, 213, 0.26);
+      box-shadow: 0 22px 48px rgba(15, 31, 54, 0.09);
+      backdrop-filter: blur(18px);
+    }
+
+    .okinawa-map-hero {
+      display: grid;
+      gap: 16px;
+      padding: 42px;
+      background:
+        radial-gradient(circle at top right, rgba(255, 206, 84, 0.34), transparent 32%),
+        linear-gradient(135deg, rgba(11, 82, 176, 0.97), rgba(41, 161, 224, 0.92));
+      color: #ffffff;
+    }
+
+    .okinawa-map-hero h1,
+    .section-title,
+    .area-grid h3 {
+      margin: 0;
+      letter-spacing: -0.04em;
+    }
+
+    .okinawa-map-hero h1 {
+      font-size: clamp(2.4rem, 4vw, 4.2rem);
+      line-height: 1.04;
+    }
+
+    .okinawa-map-hero p:not(.eyebrow) {
+      max-width: 880px;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.04rem;
+      line-height: 1.8;
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: #ffd772;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+    }
+
+    .hero-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .hero-chip-row span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .map-card,
+    .area-section {
+      display: grid;
+      gap: 18px;
+      padding: 26px;
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .map-card__head {
+      display: grid;
+      gap: 8px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .map-card__label {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: #eef5ff;
+      color: #1c5ac7;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .map-card p,
+    .area-grid p,
+    .area-section p {
+      margin: 0;
+      color: #5a7390;
+      line-height: 1.75;
+    }
+
+    .map-card figure {
+      max-width: 580px;
+      margin: 0 auto;
+      overflow: hidden;
+      padding: 12px;
+      border-radius: 22px;
+      border: 1px solid rgba(166, 190, 223, 0.48);
+      background: linear-gradient(180deg, #ffffff, #eef5ff);
+      box-shadow: 0 14px 30px rgba(33, 63, 108, 0.08);
+    }
+
+    .map-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      image-rendering: auto;
+      border-radius: 16px;
+      filter: contrast(1.14) brightness(1.04) saturate(1.05);
+    }
+
+    .map-card figcaption {
+      padding: 12px 12px 10px;
+      color: #47617e;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(245, 250, 255, 0.96));
+    }
+
+    .area-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .area-grid article {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, #f9fbff, #eff6ff);
+      border: 1px solid rgba(160, 184, 220, 0.32);
+      align-content: start;
+      grid-template-rows: auto auto minmax(5.8em, auto) 1fr;
+    }
+
+    .area-card__label {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .area-grid article:nth-child(1) .area-card__label {
+      background: #1b77ec;
+    }
+
+    .area-grid article:nth-child(2) .area-card__label {
+      background: #2aa45f;
+    }
+
+    .area-grid article:nth-child(3) .area-card__label {
+      background: #5d718a;
+    }
+
+    .area-grid ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #38516f;
+      line-height: 1.72;
+    }
+
+    .area-grid li + li {
+      margin-top: 4px;
+    }
+
+    .area-grid h3 {
+      min-height: 2.6em;
+      display: flex;
+      align-items: flex-end;
+      line-height: 1.28;
+    }
+
+    .area-grid article > p {
+      min-height: 5.8em;
+    }
+
+    @media (max-width: 1180px) {
+      .area-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .okinawa-map-page {
+        padding: 18px 18px 56px;
+      }
+
+      .okinawa-map-hero {
+        padding: 28px 22px;
+        border-radius: 24px;
+      }
+
+      .map-card,
+      .area-grid article,
+      .area-section {
+        border-radius: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-bg" id="pageBg"></div>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="./index.html">
+        <img class="brand-logo" src="./okioki.png.png" alt="okioki rent a car logo">
+        <span>
+          <strong>okioki rent a car</strong>
+          <small id="brandSub">Okinawa Sightseeing Map</small>
+        </span>
+      </a>
+
+      <div class="topbar-tools">
+        <nav class="nav" id="mainNav" aria-label="메인 메뉴">
+          <a href="./index.html" id="navHome">홈</a>
+          <a href="./tour.html" id="navTour">투어상품</a>
+          <a href="./index.html#fleet" id="navFleet">차량소개</a>
+          <a href="./index.html#reservation" id="navReservation">예약하기</a>
+        </nav>
+
+        <div class="lang-switcher" role="group" aria-label="언어 선택">
+          <button class="lang-switcher__button is-active" type="button" data-lang-button="kr" aria-pressed="true">KR</button>
+          <button class="lang-switcher__button" type="button" data-lang-button="jp" aria-pressed="false">JP</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="okinawa-map-page">
+      <section class="okinawa-map-hero">
+        <p class="eyebrow" id="heroEyebrow">OKINAWA SIGHTSEEING MAP</p>
+        <h1 id="heroTitle">오키나와 관광지도를 한눈에 확인하세요</h1>
+        <p id="heroBody">
+          나하공항 출발 기준으로 남부, 중부, 북부 주요 포인트를 한 페이지에 정리했습니다.
+          렌트카 일정 짤 때 어디를 같은 날 묶으면 좋은지, 지역별 후보지를 빠르게 비교하기 좋은 지도 페이지입니다.
+        </p>
+        <div class="hero-chip-row" id="heroChips" aria-label="주요 안내 태그"></div>
+        <div class="hero-actions">
+          <a class="button primary" href="./tour.html" id="heroPrimaryButton">투어상품 보기</a>
+          <a class="button secondary" href="./index.html#reservation" id="heroSecondaryButton">렌트카 예약으로 이동</a>
+        </div>
+      </section>
+
+      <section class="map-card">
+        <div class="map-card__head">
+          <span class="map-card__label" id="mapLabel">REFERENCE MAP</span>
+          <h2 class="section-title" id="mapTitle">오키나와 주요 관광지 참고 지도</h2>
+          <p id="mapBody">
+            주신 원본 지도를 더 잘 보이도록 카드 크기와 대비를 조정해 넣었습니다.
+            나하공항, 국제거리, 만좌모, 류큐무라, 비오스의 언덕, 고우리 오션 타워, 츄라우미 수족관, 오키나와월드까지 한 번에 참고하기 좋은 지도입니다.
+          </p>
+        </div>
+        <figure>
+          <img id="mapImage" src="./okinawa-map-reference.jpg" alt="오키나와 주요 관광지 참고 지도">
+          <figcaption id="mapCaption">
+            나하공항, 국제거리, 아메리칸 빌리지, 잔파곶, 만좌모, 코우리섬, 츄라우미 수족관, 해중도로, 세나가지마, 오우섬까지 흐름을 한 번에 보기 좋은 참고 지도입니다.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="area-section">
+        <p class="eyebrow" id="areaEyebrow" style="color:#2570e8;">AREA LIST</p>
+        <h2 id="areaTitle">북부 · 중부 · 남부 관광지 리스트</h2>
+        <p id="areaBody">
+          지금 주신 리스트 기준으로 지역별 관광지를 다시 정리했습니다.
+          일정 짤 때 북부, 중부, 남부 후보지를 한 번에 비교해서 보기 좋은 구성입니다.
+        </p>
+        <div class="area-grid">
+          <article>
+            <span class="area-card__label" id="northLabel">NORTH</span>
+            <h3 id="northTitle">오키나와 북부 관광지 리스트</h3>
+            <p id="northBody">북부 드라이브 코스에 자주 포함되는 대표 관광지, 비치, 전망 포인트입니다.</p>
+            <ul id="northList"></ul>
+          </article>
+
+          <article>
+            <span class="area-card__label" id="centralLabel">CENTRAL</span>
+            <h3 id="centralTitle">오키나와 중부 관광지 리스트</h3>
+            <p id="centralBody">중부에서 바다 드라이브, 비치, 체험, 전망 포인트를 함께 묶기 좋은 대표 관광지들입니다.</p>
+            <ul id="centralList"></ul>
+          </article>
+
+          <article>
+            <span class="area-card__label" id="southLabel">SOUTH</span>
+            <h3 id="southTitle">오키나와 남부 관광지 리스트</h3>
+            <p id="southBody">공항과 가깝고 도착일 또는 마지막 날 일정에 묶기 좋은 남부 대표 관광지들입니다.</p>
+            <ul id="southList"></ul>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer site-footer--modern">
+      <div class="site-footer__panel">
+        <section class="site-footer__company">
+          <img class="site-footer__company-name" src="./footer-company-name-white.png" alt="PAPPAP company name">
+          <div class="site-footer__legal-links">
+            <a href="./privacy.html" id="footerPrivacy">개인정보취급방침</a>
+            <span>|</span>
+            <a href="./terms.html" id="footerTerms">이용약관</a>
+            <span>|</span>
+            <a href="https://open.kakao.com/o/sWBHJKmi" target="_blank" rel="noreferrer" id="footerContact">문의하기</a>
+          </div>
+          <div class="site-footer__company-meta">
+            <p id="footerCompany">상호명 : 株式会社パップパップ</p>
+            <p id="footerBusiness">사업자등록번호 : 3600-01-023825</p>
+            <p id="footerCeo">대표이사 : 류청도</p>
+            <p><a href="mailto:pabpab8628@yahoo.co.jp">pabpab8628@yahoo.co.jp</a> · <a href="https://open.kakao.com/o/sWBHJKmi" target="_blank" rel="noreferrer" id="footerKakao">카카오톡 상담</a></p>
+          </div>
+        </section>
+
+        <section class="site-footer__brands">
+          <div class="site-footer__brands-head">
+            <h3 id="footerBrandsTitle">Our Brands</h3>
+            <p id="footerBrandsBody">株式会社パップパップ 운영 브랜드</p>
+          </div>
+          <div class="site-footer__brand-grid">
+            <a class="site-footer__brand-card" href="https://www.ryu-t.com/" target="_blank" rel="noreferrer">
+              <span class="site-footer__brand-card-visual">
+                <img src="./pabtour-bapbap-logo.png" alt="PABPAB logo">
+              </span>
+              <span class="site-footer__brand-card-copy">
+                <strong>밥밥</strong>
+                <span id="footerBrandFood">Authentic Korean Restaurant in Okinawa</span>
+              </span>
+            </a>
+            <a class="site-footer__brand-card" href="./tour.html">
+              <span class="site-footer__brand-card-visual">
+                <img src="./PAB-TOUR LOGO.jpg" alt="PAB-TOUR logo">
+              </span>
+              <span class="site-footer__brand-card-copy">
+                <strong>PAB-TOUR</strong>
+                <span id="footerBrandTour">Private Okinawa Travel</span>
+              </span>
+            </a>
+            <a class="site-footer__brand-card" href="./index.html">
+              <span class="site-footer__brand-card-visual">
+                <img src="./okioki.png.png" alt="OKIOKI RENT A CAR logo">
+              </span>
+              <span class="site-footer__brand-card-copy">
+                <strong>OKIOKI RENT A CAR</strong>
+                <span id="footerBrandCar">Okinawa Rental Car Service</span>
+              </span>
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <div class="site-footer__bottom">
+        <span id="footerBottom">© 2016 株式会社パップパップ. All rights reserved.</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const LANGUAGE_STORAGE_KEY = "rentcarPublicLanguageV1";
+
+    const COPY = {
+      kr: {
+        pageTitle: "okioki rent a car | 오키나와 관광지도",
+        metaDescription: "오키나와 렌트카 여행에 바로 활용할 수 있는 지역별 관광 포인트와 주요 이동 동선을 한눈에 정리한 지도 페이지입니다.",
+        brandSub: "Okinawa Sightseeing Map",
+        navAria: "메인 메뉴",
+        navHome: "홈",
+        navTour: "투어상품",
+        navFleet: "차량소개",
+        navReservation: "예약하기",
+        heroEyebrow: "OKINAWA SIGHTSEEING MAP",
+        heroTitle: "오키나와 관광지도를 한눈에 확인하세요",
+        heroBody: "나하공항 출발 기준으로 남부, 중부, 북부 주요 포인트를 한 페이지에 정리했습니다. 렌트카 일정 짤 때 어디를 같은 날 묶으면 좋은지, 지역별 후보지를 빠르게 비교하기 좋은 지도 페이지입니다.",
+        heroChips: ["나하공항 · 국제거리", "아메리칸빌리지 · 만좌모", "나고 · 고우리 · 츄라우미"],
+        heroPrimaryButton: "투어상품 보기",
+        heroSecondaryButton: "렌트카 예약으로 이동",
+        mapLabel: "REFERENCE MAP",
+        mapTitle: "오키나와 주요 관광지 참고 지도",
+        mapBody: "주신 원본 지도를 더 잘 보이도록 카드 크기와 대비를 조정해 넣었습니다. 나하공항, 국제거리, 만좌모, 류큐무라, 비오스의 언덕, 고우리 오션 타워, 츄라우미 수족관, 오키나와월드까지 한 번에 참고하기 좋은 지도입니다.",
+        mapAlt: "오키나와 주요 관광지 참고 지도",
+        mapCaption: "나하공항, 국제거리, 아메리칸 빌리지, 잔파곶, 만좌모, 코우리섬, 츄라우미 수족관, 해중도로, 세나가지마, 오우섬까지 흐름을 한 번에 보기 좋은 참고 지도입니다.",
+        areaEyebrow: "AREA LIST",
+        areaTitle: "북부 · 중부 · 남부 관광지 리스트",
+        areaBody: "지금 주신 리스트 기준으로 지역별 관광지를 다시 정리했습니다. 일정 짤 때 북부, 중부, 남부 후보지를 한 번에 비교해서 보기 좋은 구성입니다.",
+        northLabel: "NORTH",
+        northTitle: "오키나와 북부 관광지 리스트",
+        northBody: "북부 드라이브 코스에 자주 포함되는 대표 관광지, 비치, 전망 포인트입니다.",
+        northList: [
+          "츄라우미 수족관",
+          "에메랄드 비치",
+          "비세 후쿠기 가로수길",
+          "고우리대교",
+          "고우리섬",
+          "코우리 비치",
+          "만좌모",
+          "부세나 해중공원",
+          "부세나 비치",
+          "나고 파인애플 파크",
+          "오키나와 후르츠랜드",
+          "네오파크 오키나와",
+          "21세기 숲 비치",
+          "세소코섬",
+          "세소코 비치",
+          "나키진 성",
+          "오쿠마 비치",
+          "오쿠마 지역"
+        ],
+        centralLabel: "CENTRAL",
+        centralTitle: "오키나와 중부 관광지 리스트",
+        centralBody: "중부에서 바다 드라이브, 비치, 체험, 전망 포인트를 함께 묶기 좋은 대표 관광지들입니다.",
+        centralList: [
+          "가이츄 해중도로",
+          "해중도로 휴게소 (미치노에키)",
+          "하마히가섬",
+          "아마미츄의 무덤",
+          "시루미치 절벽",
+          "이케이지마",
+          "미야기지마",
+          "아메리칸 빌리지",
+          "선셋 비치",
+          "차탄 데포아일랜드",
+          "아라하 비치",
+          "토게이 해변",
+          "잔파곶",
+          "잔파 등대",
+          "류큐무라",
+          "요미탄 도자기 마을",
+          "카데나 전망대"
+        ],
+        southLabel: "SOUTH",
+        southTitle: "오키나와 남부 관광지 리스트",
+        southBody: "공항과 가깝고 도착일 또는 마지막 날 일정에 묶기 좋은 남부 대표 관광지들입니다.",
+        southList: [
+          "니라이카나이 대교",
+          "치넨 미사키 공원",
+          "세이화우타키",
+          "오키나와 월드",
+          "규옥도 동굴",
+          "평화기념공원",
+          "히메유리 평화기념관",
+          "갼미사키 (간미사키)",
+          "세나가지마",
+          "우미카지 테라스",
+          "토요사키 츄라SUN 비치",
+          "이토만 어시장 (우만추 시장)",
+          "아시비나 아울렛"
+        ],
+        footerPrivacy: "개인정보취급방침",
+        footerTerms: "이용약관",
+        footerContact: "문의하기",
+        footerCompany: "상호명 : 株式会社パップパップ",
+        footerBusiness: "사업자등록번호 : 3600-01-023825",
+        footerCeo: "대표이사 : 류청도",
+        footerKakao: "카카오톡 상담",
+        footerBrandsTitle: "Our Brands",
+        footerBrandsBody: "株式会社パップパップ 운영 브랜드",
+        footerBrandFood: "Authentic Korean Restaurant in Okinawa",
+        footerBrandTour: "Private Okinawa Travel",
+        footerBrandCar: "Okinawa Rental Car Service",
+        footerBottom: "© 2016 株式会社パップパップ. All rights reserved."
+      },
+      jp: {
+        pageTitle: "okioki rent a car | 沖縄観光マップ",
+        metaDescription: "沖縄レンタカー旅行ですぐに使える地域別の観光ポイントと主要動線を一目で確認できる地図ページです。",
+        brandSub: "沖縄観光マップ",
+        navAria: "メインメニュー",
+        navHome: "ホーム",
+        navTour: "ツアー商品",
+        navFleet: "車両紹介",
+        navReservation: "予約する",
+        heroEyebrow: "OKINAWA SIGHTSEEING MAP",
+        heroTitle: "沖縄の観光地図をひと目で確認できます",
+        heroBody: "那覇空港出発を基準に、南部・中部・北部の主要ポイントを1ページに整理しました。レンタカー日程を組むときに、どこを同じ日にまとめると良いか、地域別の候補地をすばやく比較しやすい地図ページです。",
+        heroChips: ["那覇空港・国際通り", "アメリカンビレッジ・万座毛", "名護・古宇利・美ら海"],
+        heroPrimaryButton: "ツアー商品を見る",
+        heroSecondaryButton: "レンタカー予約へ移動",
+        mapLabel: "REFERENCE MAP",
+        mapTitle: "沖縄主要観光地の参考マップ",
+        mapBody: "ご提供いただいた元の地図を見やすくなるよう、カードサイズとコントラストを調整して配置しました。那覇空港、国際通り、万座毛、琉球村、ビオスの丘、古宇利オーシャンタワー、美ら海水族館、おきなわワールドまで一度に確認しやすい参考マップです。",
+        mapAlt: "沖縄主要観光地の参考マップ",
+        mapCaption: "那覇空港、国際通り、アメリカンビレッジ、残波岬、万座毛、古宇利島、美ら海水族館、海中道路、瀬長島、奥武島までの流れを一度に見やすい参考地図です。",
+        areaEyebrow: "AREA LIST",
+        areaTitle: "北部・中部・南部 観光地リスト",
+        areaBody: "いただいたリストを基準に地域別の観光地を再整理しました。日程を組むときに北部・中部・南部の候補地を一度に比較しやすい構成です。",
+        northLabel: "北部",
+        northTitle: "沖縄北部 観光地リスト",
+        northBody: "北部ドライブコースによく含まれる代表的な観光地、ビーチ、展望ポイントです。",
+        northList: [
+          "美ら海水族館",
+          "エメラルドビーチ",
+          "備瀬フクギ並木",
+          "古宇利大橋",
+          "古宇利島",
+          "古宇利ビーチ",
+          "万座毛",
+          "ブセナ海中公園",
+          "ブセナビーチ",
+          "ナゴパイナップルパーク",
+          "沖縄フルーツらんど",
+          "ネオパークオキナワ",
+          "21世紀の森ビーチ",
+          "瀬底島",
+          "瀬底ビーチ",
+          "今帰仁城跡",
+          "オクマビーチ",
+          "オクマエリア"
+        ],
+        centralLabel: "中部",
+        centralTitle: "沖縄中部 観光地リスト",
+        centralBody: "中部で海のドライブ、ビーチ、体験、展望ポイントを一緒に回りやすい代表的な観光地です。",
+        centralList: [
+          "海中道路",
+          "海中道路ロードパーク（道の駅）",
+          "浜比嘉島",
+          "アマミチューの墓",
+          "シルミチュー断崖",
+          "伊計島",
+          "宮城島",
+          "アメリカンビレッジ",
+          "サンセットビーチ",
+          "北谷デポアイランド",
+          "アラハビーチ",
+          "トゲイ浜",
+          "残波岬",
+          "残波岬灯台",
+          "琉球村",
+          "読谷やちむんの里",
+          "嘉手納展望台"
+        ],
+        southLabel: "南部",
+        southTitle: "沖縄南部 観光地リスト",
+        southBody: "空港に近く、到着日または最終日に組み合わせやすい南部の代表観光地です。",
+        southList: [
+          "ニライカナイ橋",
+          "知念岬公園",
+          "斎場御嶽",
+          "おきなわワールド",
+          "玉泉洞",
+          "平和祈念公園",
+          "ひめゆり平和祈念資料館",
+          "喜屋武岬",
+          "瀬長島",
+          "ウミカジテラス",
+          "豊崎美らSUNビーチ",
+          "糸満お魚センター（うまんちゅ市場）",
+          "あしびなーアウトレット"
+        ],
+        footerPrivacy: "個人情報処理方針",
+        footerTerms: "利用規約",
+        footerContact: "お問い合わせ",
+        footerCompany: "商号 : 株式会社パップパップ",
+        footerBusiness: "事業者登録番号 : 3600-01-023825",
+        footerCeo: "代表理事 : リュ・チョンド",
+        footerKakao: "カカオトーク相談",
+        footerBrandsTitle: "Our Brands",
+        footerBrandsBody: "株式会社パップパップ 運営ブランド",
+        footerBrandFood: "Authentic Korean Restaurant in Okinawa",
+        footerBrandTour: "Private Okinawa Travel",
+        footerBrandCar: "Okinawa Rental Car Service",
+        footerBottom: "© 2016 株式会社パップパップ. All rights reserved."
+      }
+    };
+
+    function getStoredLanguage() {
+      const stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+      return stored === "jp" ? "jp" : "kr";
+    }
+
+    function setButtonState(language) {
+      document.querySelectorAll("[data-lang-button]").forEach((button) => {
+        const active = button.dataset.langButton === language;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+    }
+
+    function setText(id, value, useHtml = false) {
+      const element = document.getElementById(id);
+      if (!element) {
+        return;
+      }
+
+      if (useHtml) {
+        element.innerHTML = value;
+      } else {
+        element.textContent = value;
+      }
+    }
+
+    function renderList(id, items) {
+      const element = document.getElementById(id);
+      if (!element) {
+        return;
+      }
+
+      element.innerHTML = items.map((item) => `<li>${item}</li>`).join("");
+    }
+
+    function renderChips(items) {
+      const element = document.getElementById("heroChips");
+      if (!element) {
+        return;
+      }
+
+      element.innerHTML = items.map((item) => `<span>${item}</span>`).join("");
+    }
+
+    function applyLanguage(language) {
+      const copy = COPY[language] || COPY.kr;
+      document.documentElement.lang = language === "jp" ? "ja" : "ko";
+      document.documentElement.setAttribute("data-lang", language);
+      document.title = copy.pageTitle;
+
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) {
+        metaDescription.setAttribute("content", copy.metaDescription);
+      }
+
+      setText("brandSub", copy.brandSub);
+      document.getElementById("mainNav")?.setAttribute("aria-label", copy.navAria);
+      setText("navHome", copy.navHome);
+      setText("navTour", copy.navTour);
+      setText("navFleet", copy.navFleet);
+      setText("navReservation", copy.navReservation);
+      setText("heroEyebrow", copy.heroEyebrow);
+      setText("heroTitle", copy.heroTitle);
+      setText("heroBody", copy.heroBody);
+      renderChips(copy.heroChips);
+      setText("heroPrimaryButton", copy.heroPrimaryButton);
+      setText("heroSecondaryButton", copy.heroSecondaryButton);
+      setText("mapLabel", copy.mapLabel);
+      setText("mapTitle", copy.mapTitle);
+      setText("mapBody", copy.mapBody);
+      document.getElementById("mapImage")?.setAttribute("alt", copy.mapAlt);
+      setText("mapCaption", copy.mapCaption);
+      setText("areaEyebrow", copy.areaEyebrow);
+      setText("areaTitle", copy.areaTitle);
+      setText("areaBody", copy.areaBody);
+      setText("northLabel", copy.northLabel);
+      setText("northTitle", copy.northTitle);
+      setText("northBody", copy.northBody);
+      renderList("northList", copy.northList);
+      setText("centralLabel", copy.centralLabel);
+      setText("centralTitle", copy.centralTitle);
+      setText("centralBody", copy.centralBody);
+      renderList("centralList", copy.centralList);
+      setText("southLabel", copy.southLabel);
+      setText("southTitle", copy.southTitle);
+      setText("southBody", copy.southBody);
+      renderList("southList", copy.southList);
+      setText("footerPrivacy", copy.footerPrivacy);
+      setText("footerTerms", copy.footerTerms);
+      setText("footerContact", copy.footerContact);
+      setText("footerCompany", copy.footerCompany);
+      setText("footerBusiness", copy.footerBusiness);
+      setText("footerCeo", copy.footerCeo);
+      setText("footerKakao", copy.footerKakao);
+      setText("footerBrandsTitle", copy.footerBrandsTitle);
+      setText("footerBrandsBody", copy.footerBrandsBody);
+      setText("footerBrandFood", copy.footerBrandFood);
+      setText("footerBrandTour", copy.footerBrandTour);
+      setText("footerBrandCar", copy.footerBrandCar);
+      setText("footerBottom", copy.footerBottom);
+      setButtonState(language);
+    }
+
+    const initialLanguage = getStoredLanguage();
+    applyLanguage(initialLanguage);
+
+    document.querySelectorAll("[data-lang-button]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const nextLanguage = button.dataset.langButton === "jp" ? "jp" : "kr";
+        window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
+        applyLanguage(nextLanguage);
+      });
+    });
+  </script>
+</body>
+</html>
