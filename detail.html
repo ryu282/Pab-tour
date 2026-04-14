@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>okioki rent a car | 차량 상세</title>
+  <meta id="siteDescriptionMeta" name="description" content="오키나와 렌트카 차량 상세페이지">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Outfit:wght@400;500;600;700;800&family=SUIT:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-bg" id="pageBg"></div>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="./index.html">
+        <img class="brand-logo" data-brand-logo src="./okioki.png.png" alt="okioki rent a car logo">
+        <span>
+          <strong>okioki rent a car</strong>
+          <small>Okinawa Rental Car Service</small>
+        </span>
+      </a>
+
+      <div class="topbar-tools">
+        <nav class="nav">
+          <a href="./tour.html" data-i18n="navTour"><span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">투어상품</span><span class="copy-pair__secondary">Tours</span></span></a>
+          <a href="./index.html#fleet" data-i18n="navFleet"><span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">차량라인업</span><span class="copy-pair__secondary">Fleet</span></span></a>
+          <a href="./index.html#reservation" data-i18n="navReservation"><span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">예약하기</span><span class="copy-pair__secondary">Book Now</span></span></a>
+        </nav>
+
+        <div class="lang-switcher" role="group" aria-label="언어 선택">
+          <button class="lang-switcher__button is-active" type="button" data-lang-button="kr">KR</button>
+          <button class="lang-switcher__button" type="button" data-lang-button="jp">JP</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="detail-page">
+      <section class="detail-hero">
+        <div class="detail-visual" id="detailVisual"></div>
+        <div class="detail-copy">
+          <p class="eyebrow">CAR DETAIL</p>
+          <h1 id="detailName">차량 정보를 불러오는 중입니다.</h1>
+          <p class="detail-type" id="detailType"></p>
+          <p class="detail-note" id="detailNote"></p>
+          <div class="detail-specs" id="detailSpecs"></div>
+          <div class="detail-actions">
+            <a class="button primary" id="detailReserveLink" href="./index.html#reservation" data-i18n="reserveVehicleButton"><span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">이 차량 예약하기</span><span class="copy-pair__secondary">Reserve This Car</span></span></a>
+            <a class="button secondary" href="./index.html#fleet" data-i18n="backToFleetButton"><span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">라인업으로 돌아가기</span><span class="copy-pair__secondary">Back to Fleet</span></span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="detail-grid">
+        <article class="detail-card">
+          <h2 data-i18n="infoHeading"><span class="copy-pair"><span class="copy-pair__primary">차량 정보</span><span class="copy-pair__secondary">Vehicle Info</span></span></h2>
+          <div class="detail-info-list" id="detailInfoList"></div>
+        </article>
+        <article class="detail-card">
+          <h2 data-i18n="useCasesHeading"><span class="copy-pair"><span class="copy-pair__primary">추천 이용</span><span class="copy-pair__secondary">Best For</span></span></h2>
+          <div class="detail-bullets" id="detailUseCases"></div>
+        </article>
+        <article class="detail-card">
+          <h2 data-i18n="bookingGuideHeading"><span class="copy-pair"><span class="copy-pair__primary">예약 안내</span><span class="copy-pair__secondary">Booking Guide</span></span></h2>
+          <div class="detail-bullets" id="detailBookingGuide"></div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="site-footer site-footer--modern">
+      <div class="site-footer__panel">
+        <section class="site-footer__company">
+          <img class="site-footer__company-name" src="./footer-company-name-white.png" alt="주식회사 밥밥">
+          <div class="site-footer__legal-links">
+            <a href="./privacy.html">개인정보취급방침</a>
+            <span>|</span>
+            <a href="./terms.html">이용약관</a>
+            <span>|</span>
+            <a href="https://open.kakao.com/o/sWBHJKmi">문의하기</a>
+          </div>
+          <div class="site-footer__company-meta">
+            <p>상호명 : 株式会社パップパップ</p>
+            <p>사업자등록번호 : 3600-01-023825</p>
+            <p>대표이사 : 류청도</p>
+            <p><a href="mailto:pabpab8628@yahoo.co.jp">pabpab8628@yahoo.co.jp</a> · <a href="https://open.kakao.com/o/sWBHJKmi">카카오톡 상담</a></p>
+          </div>
+        </section>
+
+        <section class="site-footer__brands">
+          <div class="site-footer__brands-head">
+            <h3>Brand</h3>
+            <p>株式会社パップパップ 운영 브랜드</p>
+          </div>
+          <div class="site-footer__brand-grid">
+            <a class="site-footer__brand-card" href="https://www.ryu-t.com/">
+              <span class="site-footer__brand-card-visual">
+                <img src="./pabtour-bapbap-logo.png" alt="밥밥 브랜드 로고">
+              </span>
+              <span class="site-footer__brand-card-copy">
+                <strong>밥밥</strong>
+                <span>Authentic Korean Restaurant in Okinawa</span>
+              </span>
+            </a>
+            <a class="site-footer__brand-card" href="./tour.html">
+              <span class="site-footer__brand-card-visual">
+                <img src="./PAB-TOUR LOGO.jpg" alt="PAB-TOUR logo">
+              </span>
+              <span class="site-footer__brand-card-copy">
+                <strong>PAB-TOUR</strong>
+                <span>Private Okinawa Travel</span>
+              </span>
+            </a>
+            <a class="site-footer__brand-card" href="./index.html">
+              <span class="site-footer__brand-card-visual">
+                <img src="./okioki.png.png" alt="OKIOKI RENT A CAR logo">
+              </span>
+              <span class="site-footer__brand-card-copy">
+                <strong>OKIOKI RENT A CAR</strong>
+                <span>Okinawa Rental Car Service</span>
+              </span>
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <div class="site-footer__bottom">
+        <span>Copyright © 株式会社パップパップ. All rights reserved.</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="./detail.js"></script>
+</body>
+</html>
+
+
+

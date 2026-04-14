@@ -1,0 +1,242 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>okioki rent a car | 선상낚시</title>
+  <meta id="siteDescriptionMeta" name="description" content="선상낚시 액티비티 예약 페이지">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Outfit:wght@400;500;600;700;800&family=SUIT:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-activity-slug="fishing">
+  <div class="page-bg" id="pageBg"></div>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="./index.html">
+        <img class="brand-logo" data-brand-logo src="./okioki.png.png" alt="okioki rent a car logo">
+        <span>
+          <strong>okioki rent a car</strong>
+          <small>Okinawa Rental Car & Tour Desk</small>
+        </span>
+      </a>
+
+      <div class="topbar-tools">
+        <nav class="nav">
+          <a href="./tour.html" data-i18n="navTour"><span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">투어상품</span><span class="copy-pair__secondary">Tours</span></span></a>
+          <a href="./index.html#fleet" data-i18n="navFleet"><span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">차량소개</span><span class="copy-pair__secondary">Fleet</span></span></a>
+          <a href="./index.html#reservation" data-i18n="navReservation"><span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">예약하기</span><span class="copy-pair__secondary">Book Now</span></span></a>
+        </nav>
+
+        <div class="lang-switcher" role="group" aria-label="언어 전환">
+          <button class="lang-switcher__button is-active" type="button" data-lang-button="kr">KR</button>
+          <button class="lang-switcher__button" type="button" data-lang-button="jp">JP</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="detail-page">
+      <section class="detail-hero">
+        <div class="activity-visual activity-visual--fishing" id="activityVisual">
+          <span class="activity-visual__badge" id="activityVisualBadge">SEA ACTIVITY</span>
+          <h1 class="activity-visual__title" id="activityVisualTitle">선상낚시</h1>
+          <p class="activity-visual__text" id="activityVisualText">선상에서 바로 출항해 낚시를 즐기는 오키나와 대표 해양 체험</p>
+        </div>
+
+        <div class="detail-copy">
+          <p class="eyebrow" data-i18n="activityEyebrow">ACTIVITY DETAIL</p>
+          <h1 id="activityName"><span class="copy-pair"><span class="copy-pair__primary">선상낚시</span><span class="copy-pair__secondary">Boat Fishing</span></span></h1>
+          <p class="detail-type" id="activityType"></p>
+          <p class="detail-note" id="activityNote"></p>
+          <div class="detail-specs" id="activitySpecs"></div>
+          <div class="detail-actions">
+            <a class="button primary" href="https://open.kakao.com/o/sWBHJKmi" data-i18n="activityInquiryButton"><span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">카카오톡 상담</span><span class="copy-pair__secondary">KakaoTalk Help</span></span></a>
+            <a class="button secondary" href="./tour.html" data-i18n="activityBackButton"><span class="copy-pair copy-pair--inline"><span class="copy-pair__primary">투어 페이지로</span><span class="copy-pair__secondary">Back to Tours</span></span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="detail-grid">
+        <article class="detail-card">
+          <h2 data-i18n="infoHeading"><span class="copy-pair"><span class="copy-pair__primary">액티비티 정보</span><span class="copy-pair__secondary">Activity Info</span></span></h2>
+          <div class="detail-info-list" id="activityInfoList"></div>
+        </article>
+        <article class="detail-card">
+          <h2 data-i18n="useCasesHeading"><span class="copy-pair"><span class="copy-pair__primary">추천 이용</span><span class="copy-pair__secondary">Best For</span></span></h2>
+          <div class="detail-bullets" id="activityUseCases"></div>
+        </article>
+        <article class="detail-card">
+          <h2 data-i18n="bookingGuideHeading"><span class="copy-pair"><span class="copy-pair__primary">예약 안내</span><span class="copy-pair__secondary">Booking Guide</span></span></h2>
+          <div class="detail-bullets" id="activityBookingGuide"></div>
+        </article>
+      </section>
+
+      <section class="activity-booking-section">
+        <div class="section-heading">
+          <p class="eyebrow" data-i18n="activityBookingEyebrow">ACTIVITY BOOKING</p>
+          <h2 data-i18n="activityBookingTitle"><span class="copy-pair"><span class="copy-pair__primary">액티비티 예약 신청</span><span class="copy-pair__secondary">Activity Booking</span></span></h2>
+        </div>
+
+        <div class="activity-booking-layout">
+          <form class="activity-booking-form" id="activityBookingForm">
+            <input type="text" name="website" class="hidden-field" tabindex="-1" autocomplete="off">
+
+            <div class="field-grid">
+              <div class="field">
+                <label for="activityDate" data-i18n="activityDateLabel"><span class="copy-pair"><span class="copy-pair__primary">이용 날짜</span><span class="copy-pair__secondary">Date</span></span></label>
+                <input id="activityDate" name="activityDate" type="date" required>
+              </div>
+              <div class="field">
+                <label for="activityTime" data-i18n="activityTimeLabel"><span class="copy-pair"><span class="copy-pair__primary">이용 시간</span><span class="copy-pair__secondary">Time</span></span></label>
+                <select id="activityTime" name="activityTime" required></select>
+              </div>
+            </div>
+
+            <div class="field-grid field-grid--single">
+              <div class="field">
+                <label for="activityMeetingPlace" data-i18n="activityMeetingPlaceLabel"><span class="copy-pair"><span class="copy-pair__primary">미팅 장소</span><span class="copy-pair__secondary">Meeting Place</span></span></label>
+                <input id="activityMeetingPlace" name="activityMeetingPlace" type="text" data-i18n-placeholder="activityMeetingPlacePlaceholder" placeholder="예: 나하 시내 호텔 로비" required>
+              </div>
+            </div>
+
+            <div class="field-grid">
+              <div class="field">
+                <label for="activityNameField" data-i18n="activityNameLabel"><span class="copy-pair"><span class="copy-pair__primary">예약자명</span><span class="copy-pair__secondary">Name</span></span></label>
+                <input id="activityNameField" name="activityNameField" type="text" data-i18n-placeholder="activityNamePlaceholder" placeholder="예약자 성함" required>
+              </div>
+              <div class="field">
+                <label for="activityPhone" data-i18n="activityPhoneLabel"><span class="copy-pair"><span class="copy-pair__primary">연락처</span><span class="copy-pair__secondary">Phone</span></span></label>
+                <input id="activityPhone" name="activityPhone" type="tel" data-i18n-placeholder="activityPhonePlaceholder" placeholder="010-0000-0000" required>
+              </div>
+            </div>
+
+            <div class="field-grid field-grid--single">
+              <div class="field">
+                <label for="activityEmail" data-i18n="activityEmailLabel"><span class="copy-pair"><span class="copy-pair__primary">이메일</span><span class="copy-pair__secondary">Email</span></span></label>
+                <input id="activityEmail" name="activityEmail" type="email" data-i18n-placeholder="activityEmailPlaceholder" placeholder="name@example.com" required>
+              </div>
+            </div>
+
+            <div class="field-grid">
+              <div class="field">
+                <label for="activityAdults" data-i18n="activityAdultLabel"><span class="copy-pair"><span class="copy-pair__primary">성인 인원</span><span class="copy-pair__secondary">Adults</span></span></label>
+                <input id="activityAdults" name="activityAdults" type="number" min="0" max="20" value="1" required>
+              </div>
+              <div class="field">
+                <label for="activityChildren" data-i18n="activityChildLabel"><span class="copy-pair"><span class="copy-pair__primary">소아 인원</span><span class="copy-pair__secondary">Children</span></span></label>
+                <input id="activityChildren" name="activityChildren" type="number" min="0" max="20" value="0" required>
+              </div>
+            </div>
+
+            <div class="field-grid">
+              <div class="field">
+                <label for="activityTotalGuests" data-i18n="activityTotalGuestsLabel"><span class="copy-pair"><span class="copy-pair__primary">총 인원</span><span class="copy-pair__secondary">Total Guests</span></span></label>
+                <input id="activityTotalGuests" name="activityTotalGuests" type="text" readonly>
+              </div>
+              <div class="field">
+                <label for="activityTotalPrice" data-i18n="activityTotalPriceLabel"><span class="copy-pair"><span class="copy-pair__primary">예상 합계금액</span><span class="copy-pair__secondary">Estimated Total</span></span></label>
+                <input id="activityTotalPrice" name="activityTotalPrice" type="text" readonly>
+              </div>
+            </div>
+
+            <div class="field field-full">
+              <label for="activityMessage" data-i18n="activityMessageLabel"><span class="copy-pair"><span class="copy-pair__primary">추가 요청사항</span><span class="copy-pair__secondary">Special Requests</span></span></label>
+              <textarea id="activityMessage" name="activityMessage" rows="4" data-i18n-placeholder="activityMessagePlaceholder" placeholder="참가자 특이사항이나 요청 내용을 남겨 주세요."></textarea>
+            </div>
+
+            <label class="check-row">
+              <input id="activityAgree" name="activityAgree" type="checkbox" required>
+              <span data-i18n="activityAgreeText">예약 정보 저장 및 확인 연락에 동의합니다.</span>
+            </label>
+
+            <button class="button primary wide" id="activitySubmitButton" type="submit" data-i18n="activitySubmitButton"><span class="copy-pair"><span class="copy-pair__primary">예약 신청 저장</span><span class="copy-pair__secondary">Save Request</span></span></button>
+            <p class="activity-booking-status" id="activityBookingStatus"></p>
+          </form>
+
+          <aside class="activity-booking-summary">
+            <article class="activity-summary-card">
+              <p class="activity-summary-card__eyebrow" data-i18n="activityPriceGuideLabel">PRICE GUIDE</p>
+              <h3 id="activityPriceGuideTitle">요금 안내</h3>
+              <p id="activityPriceGuideBody"></p>
+            </article>
+            <article class="activity-summary-card">
+              <p class="activity-summary-card__eyebrow" data-i18n="activityRequestFlowLabel">REQUEST FLOW</p>
+              <h3 data-i18n="activityRequestTitle">신청 방법</h3>
+              <p data-i18n="activityRequestBody">신청 내용을 저장하면 운영팀이 확인 후 안내드립니다. 빠른 조율이 필요하면 카카오톡 상담을 함께 이용해 주세요.</p>
+            </article>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer site-footer--modern">
+      <div class="site-footer__panel">
+        <section class="site-footer__company">
+          <img class="site-footer__company-name" src="./footer-company-name-white.png" alt="주식회사 밥밥">
+          <div class="site-footer__legal-links">
+            <a href="./privacy.html">개인정보취급방침</a>
+            <span>|</span>
+            <a href="./terms.html">이용약관</a>
+            <span>|</span>
+            <a href="https://open.kakao.com/o/sWBHJKmi">문의하기</a>
+          </div>
+          <div class="site-footer__company-meta">
+            <p>상호명 : 株式会社パップパップ</p>
+            <p>사업자등록번호 : 3600-01-023825</p>
+            <p>대표이사 : 류청도</p>
+            <p><a href="mailto:pabpab8628@yahoo.co.jp">pabpab8628@yahoo.co.jp</a> · <a href="https://open.kakao.com/o/sWBHJKmi">카카오톡 상담</a></p>
+          </div>
+        </section>
+
+        <section class="site-footer__brands">
+          <div class="site-footer__brands-head">
+            <h3>Brand</h3>
+            <p>株式会社パップパップ 운영 브랜드</p>
+          </div>
+          <div class="site-footer__brand-grid">
+            <a class="site-footer__brand-card" href="https://www.ryu-t.com/">
+              <span class="site-footer__brand-card-visual">
+                <img src="./pabtour-bapbap-logo.png" alt="밥밥 브랜드 로고">
+              </span>
+              <span class="site-footer__brand-card-copy">
+                <strong>밥밥</strong>
+                <span>Authentic Korean Restaurant in Okinawa</span>
+              </span>
+            </a>
+            <a class="site-footer__brand-card" href="./tour.html">
+              <span class="site-footer__brand-card-visual">
+                <img src="./PAB-TOUR LOGO.jpg" alt="PAB-TOUR logo">
+              </span>
+              <span class="site-footer__brand-card-copy">
+                <strong>PAB-TOUR</strong>
+                <span>Private Okinawa Travel</span>
+              </span>
+            </a>
+            <a class="site-footer__brand-card" href="./index.html">
+              <span class="site-footer__brand-card-visual">
+                <img src="./okioki.png.png" alt="OKIOKI RENT A CAR logo">
+              </span>
+              <span class="site-footer__brand-card-copy">
+                <strong>OKIOKI RENT A CAR</strong>
+                <span>Okinawa Rental Car Service</span>
+              </span>
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <div class="site-footer__bottom">
+        <span>Copyright © 株式会社パップパップ. All rights reserved.</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="./config.js"></script>
+  <script src="./activity-detail.js"></script>
+</body>
+</html>
+
+
+
