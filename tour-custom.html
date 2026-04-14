@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ko" data-lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>okioki rent a car | 픽/드랍 택시서비스</title>
+  <meta name="description" content="공항과 골프장을 편하게 오갈 수 있도록 운영하는 픽업/드롭 전용 서비스입니다.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Outfit:wght@400;500;600;700;800&family=SUIT:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    .tour-detail-page { padding: 32px 32px 72px; display: grid; gap: 24px; }
+    .tour-detail-panel, .tour-detail-slot, .tour-guide-card, .tour-pdf-card, .tour-price-note {
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(165, 186, 213, 0.26);
+      box-shadow: 0 22px 48px rgba(15, 31, 54, 0.09);
+      border-radius: 28px;
+    }
+    .tour-detail-panel { padding: 28px; display: grid; gap: 18px; }
+    .tour-detail-hero { display: grid; grid-template-columns: 1.06fr 0.94fr; gap: 22px; align-items: stretch; }
+    .tour-detail-copy { display: grid; gap: 14px; align-content: start; }
+    .tour-detail-copy h1, .tour-detail-slot h2, .tour-guide-card h3, .tour-pdf-card h3, .tour-price-note h3 {
+      margin: 0;
+      color: #163255;
+      letter-spacing: -0.04em;
+    }
+    .tour-detail-copy p, .tour-detail-slot p, .tour-guide-card p, .tour-pdf-card p, .tour-price-note p, .tour-price-note li {
+      margin: 0;
+      color: #58708e;
+      line-height: 1.82;
+    }
+    .tour-detail-badge, .tour-guide-label {
+      display: inline-flex;
+      width: fit-content;
+      min-height: 36px;
+      align-items: center;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: #1f5ea8;
+      color: #fff;
+      font-weight: 800;
+    }
+    .tour-guide-label {
+      min-height: auto;
+      padding: 7px 12px;
+      background: rgba(31, 94, 168, 0.1);
+      color: #1f5ea8;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+    }
+    .tour-detail-visual {
+      overflow: hidden;
+      border-radius: 24px;
+      min-height: 320px;
+      background: linear-gradient(180deg, #f7fbff, #eaf2ff);
+      border: 1px solid rgba(179, 198, 226, 0.4);
+      box-shadow: 0 18px 36px rgba(19, 45, 79, 0.08);
+    }
+    .tour-detail-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .tour-action-row { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 6px; }
+    .tour-action-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 24px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #1f76ff, #0f5ed8);
+      color: #fff;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 16px 30px rgba(31, 118, 255, 0.24);
+    }
+    .tour-action-button.secondary { background: #edf4ff; color: #235cb0; box-shadow: none; }
+    .tour-guide-grid, .tour-price-grid, .tour-pdf-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .tour-guide-card, .tour-price-note, .tour-pdf-card { padding: 24px; display: grid; gap: 14px; align-content: start; }
+    .tour-detail-list { margin: 0; padding-left: 20px; color: #38516f; line-height: 1.74; }
+    .tour-detail-list li + li { margin-top: 6px; }
+    .tour-detail-slot { padding: 24px; display: grid; gap: 14px; }
+    .tour-price-note { background: linear-gradient(180deg, rgba(240, 247, 255, 0.98), rgba(232, 242, 255, 0.96)); }
+    .tour-price-note strong, .tour-pdf-warning { color: #b14a18; font-weight: 800; }
+    .tour-pdf-card { background: linear-gradient(180deg, rgba(241, 247, 255, 0.98), rgba(232, 241, 255, 0.96)); border-radius: 22px; }
+    .tour-pdf-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .tour-pdf-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: #1f5ea8;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 800;
+    }
+    @media (max-width: 960px) {
+      .tour-detail-page { padding: 18px 18px 56px; }
+      .tour-detail-hero, .tour-guide-grid, .tour-price-grid, .tour-pdf-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-bg" id="pageBg"></div>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="./index.html">
+        <img class="brand-logo" src="./okioki.png.png" alt="okioki rent a car logo">
+        <span>
+          <strong>okioki rent a car</strong>
+          <small data-i18n="brandSub">Airport &amp; Golf Transfer</small>
+        </span>
+      </a>
+      <div class="topbar-tools">
+        <nav class="nav" data-i18n-aria-label="navAriaLabel">
+          <a href="./index.html" data-i18n="navHome">홈</a>
+          <a href="./tour.html" data-i18n="navTour">투어상품</a>
+          <a href="./private-tour-request.html" data-i18n="navPrivate">단독투어</a>
+        </nav>
+        <div class="lang-switcher" role="group" aria-label="언어 선택">
+          <button class="lang-switcher__button is-active" type="button" data-lang-button="kr" aria-pressed="true">KR</button>
+          <button class="lang-switcher__button" type="button" data-lang-button="jp" aria-pressed="false">JP</button>
+        </div>
+      </div>
+    </header>
+    <main class="tour-detail-page">
+      <section class="tour-detail-panel tour-detail-hero">
+        <div class="tour-detail-copy">
+          <span class="tour-detail-badge" data-i18n="pageBadge">픽/드랍서비스</span>
+          <h1 data-i18n="heroTitle">픽/드랍 택시서비스</h1>
+          <p data-i18n="heroBody1">공항과 골프장을 편하게 오갈 수 있도록 운영하는 픽업/드롭 전용 서비스입니다.</p>
+          <p data-i18n="heroBody2">일정 목적에 따라 공항 이동, 골프장 이동, 공항 연계 이동까지 상담 후 맞춰 진행할 수 있습니다.</p>
+          <div class="tour-action-row">
+            <a class="tour-action-button" href="./transfer-booking-request.html" data-i18n="heroPrimaryButton">신청하기</a>
+            <a class="tour-action-button secondary" href="./tour.html" data-i18n="heroSecondaryButton">투어상품 보기</a>
+          </div>
+        </div>
+        <div class="tour-detail-visual">
+          <img src="./pickup-drop-detail-hero.png" data-i18n-alt="heroImageAlt" alt="픽업 및 드롭 서비스 대표 이미지">
+        </div>
+      </section>
+
+      <section class="tour-detail-slot">
+        <h2 data-i18n="airportSectionTitle">공항 픽업 / 드롭 서비스 안내</h2>
+        <div class="tour-guide-grid">
+          <article class="tour-guide-card">
+            <span class="tour-guide-label" data-i18n="labelBasic">기본 안내</span>
+            <h3 data-i18n="airportCard1Title">공항 기준 픽업 및 드롭</h3>
+            <p data-i18n="airportCard1Body1">공항 기준 픽업 및 드롭 서비스를 제공합니다.</p>
+            <p data-i18n="airportCard1Body2">나하 공항 도착 또는 출발 일정에 맞춰 불필요한 대기 없이 편하게 이동하실 수 있습니다.</p>
+          </article>
+          <article class="tour-guide-card">
+            <span class="tour-guide-label" data-i18n="labelPickup">픽업</span>
+            <h3 data-i18n="airportCard2Title">공항 도착 시간에 맞춘 픽업</h3>
+            <p data-i18n="airportCard2Body1">항공편 도착 시간에 맞춰 픽업이 진행됩니다.</p>
+            <p data-i18n="airportCard2Body2">항공편 지연이나 수하물 수령 시간까지 고려해 사전 안내 후 운영됩니다.</p>
+          </article>
+          <article class="tour-guide-card">
+            <span class="tour-guide-label" data-i18n="labelDrop">드롭</span>
+            <h3 data-i18n="airportCard3Title">공항 또는 희망 장소 이동</h3>
+            <p data-i18n="airportCard3Body1">일정 종료 후 공항 또는 희망하시는 장소까지 이동 가능합니다.</p>
+            <p data-i18n="airportCard3Body2">나하 시내 기준 주요 지역은 사전 상담 후 유연하게 안내드립니다.</p>
+          </article>
+          <article class="tour-guide-card">
+            <span class="tour-guide-label" data-i18n="labelGuide">이용 안내</span>
+            <h3 data-i18n="airportCard4Title">사전 협의 후 위치 확정</h3>
+            <ul class="tour-detail-list">
+              <li data-i18n="airportCard4Item1">픽업 및 드롭 위치는 사전 협의 후 확정됩니다.</li>
+              <li data-i18n="airportCard4Item2">숙소 위치나 항공편 시간에 따라 출발 시간은 일부 조정될 수 있습니다.</li>
+              <li data-i18n="airportCard4Item3">심야 또는 새벽 이동은 별도 안내가 있을 수 있습니다.</li>
+            </ul>
+          </article>
+        </div>
+        <p data-i18n="airportNote1">※ 나하 외 지역은 추가 비용이 발생할 수 있습니다.</p>
+        <p data-i18n="airportNote2">※ 교통 상황에 따라 시간 변동이 있을 수 있습니다.</p>
+      </section>
+
+      <section class="tour-detail-slot">
+        <h2 data-i18n="golfSectionTitle">골프장 픽업 / 드롭 서비스 안내</h2>
+        <div class="tour-guide-grid">
+          <article class="tour-guide-card">
+            <span class="tour-guide-label" data-i18n="labelBasic">기본 안내</span>
+            <h3 data-i18n="golfCard1Title">골프장 왕복 이동 서비스</h3>
+            <p data-i18n="golfCard1Body1">골프장 왕복 이동을 위한 픽업 및 드롭 서비스를 제공합니다.</p>
+            <p data-i18n="golfCard1Body2">숙소에서 골프장까지, 라운딩 종료 후 복귀까지 편안하게 이동하실 수 있습니다.</p>
+          </article>
+          <article class="tour-guide-card">
+            <span class="tour-guide-label" data-i18n="labelPickup">픽업</span>
+            <h3 data-i18n="golfCard2Title">숙소에서 골프장까지</h3>
+            <p data-i18n="golfCard2Body1">예약 시 입력하신 숙소에서 티오프 시간에 맞춰 픽업이 진행됩니다.</p>
+            <p data-i18n="golfCard2Body2">이동 시간과 준비 시간을 고려하여 출발 시간이 사전 안내됩니다.</p>
+          </article>
+          <article class="tour-guide-card">
+            <span class="tour-guide-label" data-i18n="labelDrop">드롭</span>
+            <h3 data-i18n="golfCard3Title">골프장 종료 후 숙소 복귀</h3>
+            <p data-i18n="golfCard3Body1">라운딩 종료 후 숙소까지 안전하게 이동해드립니다.</p>
+            <p data-i18n="golfCard3Body2">현장 진행 상황에 따라 출발 시간은 유동적으로 조정될 수 있습니다.</p>
+          </article>
+          <article class="tour-guide-card">
+            <span class="tour-guide-label" data-i18n="labelGuide">이용 안내</span>
+            <h3 data-i18n="golfCard4Title">골프 일정 기준 운영</h3>
+            <ul class="tour-detail-list">
+              <li data-i18n="golfCard4Item1">티오프 시간 기준으로 픽업 시간이 조정됩니다.</li>
+              <li data-i18n="golfCard4Item2">골프장 위치와 거리, 교통 상황에 따라 이동 시간이 달라질 수 있습니다.</li>
+              <li data-i18n="golfCard4Item3">골프장 예약 시간 변경 시 반드시 사전 공유 부탁드립니다.</li>
+            </ul>
+          </article>
+        </div>
+        <p data-i18n="golfNote1">※ 나하 외 지역 숙소는 추가 비용이 발생할 수 있습니다.</p>
+        <p data-i18n="golfNote2">※ 골프장 대기 및 추가 이동 발생 시 별도 비용이 안내됩니다.</p>
+      </section>
+
+      <section class="tour-detail-slot">
+        <h2 data-i18n="pricingSectionTitle">예약 및 요금 계산 안내</h2>
+        <div class="tour-price-grid">
+          <article class="tour-price-note">
+            <h3 data-i18n="pricingCard1Title">지역별 편도 / 왕복 계산 가능</h3>
+            <p data-i18n="pricingCard1Body">예약 상세페이지에서는 <strong>지역, 차량, 편도/왕복</strong>을 선택하면 예상 합계금액이 바로 계산됩니다.</p>
+            <ul class="tour-detail-list">
+              <li data-i18n="pricingCard1Item1">표시 금액은 편도 기준입니다.</li>
+              <li data-i18n="pricingCard1Item2">왕복은 동일 지역 기준으로 2배 자동 계산됩니다.</li>
+              <li data-i18n="pricingCard1Item3">알파드 7인승 / 하이에이스 10인승 기준으로 요금이 구분되어 있습니다.</li>
+            </ul>
+          </article>
+          <article class="tour-price-note">
+            <h3 data-i18n="pricingCard2Title">추가 안내</h3>
+            <p data-i18n="pricingCard2Body">시간초과 시 <strong>30분 3,000엔 / 1시간 6,000엔</strong> 비용이 발생할 수 있습니다.</p>
+            <ul class="tour-detail-list">
+              <li data-i18n="pricingCard2Item1">심야 이동이나 추가 경유가 있는 경우 별도 안내가 제공됩니다.</li>
+              <li data-i18n="pricingCard2Item2">공항, 골프장, 숙소 외 다른 목적지 연계도 상담 가능합니다.</li>
+              <li data-i18n="pricingCard2Item3">예약 확정 전 최종 금액은 운영팀이 다시 안내드립니다.</li>
+            </ul>
+          </article>
+        </div>
+        <div class="tour-action-row">
+          <a class="tour-action-button" href="./transfer-booking-request.html" data-i18n="pricingButton">예약 상세페이지로 이동</a>
+        </div>
+      </section>
+
+      <section class="tour-detail-slot">
+        <h2 data-i18n="pdfSectionTitle">요금표 안내</h2>
+        <p data-i18n="pdfSectionBody">아래 PDF에서 픽/드랍 서비스 요금표를 바로 확인하실 수 있습니다.</p>
+        <p class="tour-pdf-warning" data-i18n="pdfWarning">※ 픽/드랍 요금표의 금액은 편도 요금 기준이며, 왕복 요금이 아닙니다.</p>
+        <div class="tour-pdf-grid">
+          <article class="tour-pdf-card">
+            <h3 data-i18n="pdfCard1Title">픽/드랍 요금표</h3>
+            <p data-i18n="pdfCard1Body">고객용 기본 픽업/드롭 요금표입니다.</p>
+            <p class="tour-pdf-warning" data-i18n="pdfCard1Warning">편도 요금 기준 / 왕복 요금 아님</p>
+            <div class="tour-pdf-actions">
+              <a class="tour-pdf-link" href="./pickup-drop-price.pdf" target="_blank" rel="noopener" data-i18n="pdfOpen">PDF 열기</a>
+              <a class="tour-pdf-link" href="./pickup-drop-price.pdf" download data-i18n="pdfDownload">다운로드</a>
+            </div>
+          </article>
+          <article class="tour-pdf-card">
+            <h3 data-i18n="pdfCard2Title">오키나와 지역별 요금표</h3>
+            <p data-i18n="pdfCard2Body">지역 기준 이동 요금을 확인할 수 있는 PDF입니다.</p>
+            <div class="tour-pdf-actions">
+              <a class="tour-pdf-link" href="./okinawa-transfer-price-region1.pdf" target="_blank" rel="noopener" data-i18n="pdfOpen">PDF 열기</a>
+              <a class="tour-pdf-link" href="./okinawa-transfer-price-region1.pdf" download data-i18n="pdfDownload">다운로드</a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const LANGUAGE_STORAGE_KEY = "rentcarPublicLanguageV1";
+
+    const COPY = {
+      kr: {
+        pageTitle: "okioki rent a car | 픽/드랍 택시서비스",
+        metaDescription: "공항과 골프장을 편하게 오갈 수 있도록 운영하는 픽업/드롭 전용 서비스입니다.",
+        brandSub: "Airport & Golf Transfer",
+        navAriaLabel: "주요 메뉴",
+        navHome: "홈",
+        navTour: "투어상품",
+        navPrivate: "단독투어",
+        pageBadge: "픽/드랍서비스",
+        heroTitle: "픽/드랍 택시서비스",
+        heroBody1: "공항과 골프장을 편하게 오갈 수 있도록 운영하는 픽업/드롭 전용 서비스입니다.",
+        heroBody2: "일정 목적에 따라 공항 이동, 골프장 이동, 공항 연계 이동까지 상담 후 맞춰 진행할 수 있습니다.",
+        heroPrimaryButton: "신청하기",
+        heroSecondaryButton: "투어상품 보기",
+        heroImageAlt: "픽업 및 드롭 서비스 대표 이미지",
+        airportSectionTitle: "공항 픽업 / 드롭 서비스 안내",
+        labelBasic: "기본 안내",
+        labelPickup: "픽업",
+        labelDrop: "드롭",
+        labelGuide: "이용 안내",
+        airportCard1Title: "공항 기준 픽업 및 드롭",
+        airportCard1Body1: "공항 기준 픽업 및 드롭 서비스를 제공합니다.",
+        airportCard1Body2: "나하 공항 도착 또는 출발 일정에 맞춰 불필요한 대기 없이 편하게 이동하실 수 있습니다.",
+        airportCard2Title: "공항 도착 시간에 맞춘 픽업",
+        airportCard2Body1: "항공편 도착 시간에 맞춰 픽업이 진행됩니다.",
+        airportCard2Body2: "항공편 지연이나 수하물 수령 시간까지 고려해 사전 안내 후 운영됩니다.",
+        airportCard3Title: "공항 또는 희망 장소 이동",
+        airportCard3Body1: "일정 종료 후 공항 또는 희망하시는 장소까지 이동 가능합니다.",
+        airportCard3Body2: "나하 시내 기준 주요 지역은 사전 상담 후 유연하게 안내드립니다.",
+        airportCard4Title: "사전 협의 후 위치 확정",
+        airportCard4Item1: "픽업 및 드롭 위치는 사전 협의 후 확정됩니다.",
+        airportCard4Item2: "숙소 위치나 항공편 시간에 따라 출발 시간은 일부 조정될 수 있습니다.",
+        airportCard4Item3: "심야 또는 새벽 이동은 별도 안내가 있을 수 있습니다.",
+        airportNote1: "※ 나하 외 지역은 추가 비용이 발생할 수 있습니다.",
+        airportNote2: "※ 교통 상황에 따라 시간 변동이 있을 수 있습니다.",
+        golfSectionTitle: "골프장 픽업 / 드롭 서비스 안내",
+        golfCard1Title: "골프장 왕복 이동 서비스",
+        golfCard1Body1: "골프장 왕복 이동을 위한 픽업 및 드롭 서비스를 제공합니다.",
+        golfCard1Body2: "숙소에서 골프장까지, 라운딩 종료 후 복귀까지 편안하게 이동하실 수 있습니다.",
+        golfCard2Title: "숙소에서 골프장까지",
+        golfCard2Body1: "예약 시 입력하신 숙소에서 티오프 시간에 맞춰 픽업이 진행됩니다.",
+        golfCard2Body2: "이동 시간과 준비 시간을 고려하여 출발 시간이 사전 안내됩니다.",
+        golfCard3Title: "골프장 종료 후 숙소 복귀",
+        golfCard3Body1: "라운딩 종료 후 숙소까지 안전하게 이동해드립니다.",
+        golfCard3Body2: "현장 진행 상황에 따라 출발 시간은 유동적으로 조정될 수 있습니다.",
+        golfCard4Title: "골프 일정 기준 운영",
+        golfCard4Item1: "티오프 시간 기준으로 픽업 시간이 조정됩니다.",
+        golfCard4Item2: "골프장 위치와 거리, 교통 상황에 따라 이동 시간이 달라질 수 있습니다.",
+        golfCard4Item3: "골프장 예약 시간 변경 시 반드시 사전 공유 부탁드립니다.",
+        golfNote1: "※ 나하 외 지역 숙소는 추가 비용이 발생할 수 있습니다.",
+        golfNote2: "※ 골프장 대기 및 추가 이동 발생 시 별도 비용이 안내됩니다.",
+        pricingSectionTitle: "예약 및 요금 계산 안내",
+        pricingCard1Title: "지역별 편도 / 왕복 계산 가능",
+        pricingCard1Body: "예약 상세페이지에서는 <strong>지역, 차량, 편도/왕복</strong>을 선택하면 예상 합계금액이 바로 계산됩니다.",
+        pricingCard1Item1: "표시 금액은 편도 기준입니다.",
+        pricingCard1Item2: "왕복은 동일 지역 기준으로 2배 자동 계산됩니다.",
+        pricingCard1Item3: "알파드 7인승 / 하이에이스 10인승 기준으로 요금이 구분되어 있습니다.",
+        pricingCard2Title: "추가 안내",
+        pricingCard2Body: "시간초과 시 <strong>30분 3,000엔 / 1시간 6,000엔</strong> 비용이 발생할 수 있습니다.",
+        pricingCard2Item1: "심야 이동이나 추가 경유가 있는 경우 별도 안내가 제공됩니다.",
+        pricingCard2Item2: "공항, 골프장, 숙소 외 다른 목적지 연계도 상담 가능합니다.",
+        pricingCard2Item3: "예약 확정 전 최종 금액은 운영팀이 다시 안내드립니다.",
+        pricingButton: "예약 상세페이지로 이동",
+        pdfSectionTitle: "요금표 안내",
+        pdfSectionBody: "아래 PDF에서 픽/드랍 서비스 요금표를 바로 확인하실 수 있습니다.",
+        pdfWarning: "※ 픽/드랍 요금표의 금액은 편도 요금 기준이며, 왕복 요금이 아닙니다.",
+        pdfCard1Title: "픽/드랍 요금표",
+        pdfCard1Body: "고객용 기본 픽업/드롭 요금표입니다.",
+        pdfCard1Warning: "편도 요금 기준 / 왕복 요금 아님",
+        pdfCard2Title: "오키나와 지역별 요금표",
+        pdfCard2Body: "지역 기준 이동 요금을 확인할 수 있는 PDF입니다.",
+        pdfOpen: "PDF 열기",
+        pdfDownload: "다운로드"
+      },
+      jp: {
+        pageTitle: "okioki rent a car | 送迎タクシーサービス",
+        metaDescription: "空港とゴルフ場を快適につなぐピックアップ・ドロップ専用サービスです。",
+        brandSub: "Airport & Golf Transfer",
+        navAriaLabel: "メインメニュー",
+        navHome: "ホーム",
+        navTour: "ツアー商品",
+        navPrivate: "プライベートツアー",
+        pageBadge: "送迎サービス",
+        heroTitle: "送迎タクシーサービス",
+        heroBody1: "空港とゴルフ場を快適につなぐピックアップ・ドロップ専用サービスです。",
+        heroBody2: "空港送迎、ゴルフ場送迎、空港連携移動までご相談のうえ柔軟に対応いたします。",
+        heroPrimaryButton: "予約申し込み",
+        heroSecondaryButton: "ツアー商品を見る",
+        heroImageAlt: "送迎サービスのメインイメージ",
+        airportSectionTitle: "空港ピックアップ / ドロップ案内",
+        labelBasic: "基本案内",
+        labelPickup: "お迎え",
+        labelDrop: "お送り",
+        labelGuide: "ご利用案内",
+        airportCard1Title: "空港基準の送迎対応",
+        airportCard1Body1: "空港基準のピックアップ・ドロップサービスを提供します。",
+        airportCard1Body2: "那覇空港の到着または出発時間に合わせて、無駄な待機なく快適に移動できます。",
+        airportCard2Title: "到着時間に合わせたお迎え",
+        airportCard2Body1: "ご利用便の到着時間に合わせてお迎えします。",
+        airportCard2Body2: "便の遅延や手荷物受け取り時間も考慮して、事前にご案内のうえ運行します。",
+        airportCard3Title: "空港またはご希望の場所までお送り",
+        airportCard3Body1: "ご利用後は空港またはご希望の場所までお送り可能です。",
+        airportCard3Body2: "那覇市内の主要エリアは事前相談のうえ柔軟にご案内します。",
+        airportCard4Title: "事前相談後に場所確定",
+        airportCard4Item1: "ピックアップとドロップ場所は事前相談後に確定します。",
+        airportCard4Item2: "宿泊先の位置やフライト時間により出発時間が一部調整される場合があります。",
+        airportCard4Item3: "深夜または早朝移動は別途ご案内となる場合があります。",
+        airportNote1: "※ 那覇以外の地域は追加料金が発生する場合があります。",
+        airportNote2: "※ 交通状況により時間が変動することがあります。",
+        golfSectionTitle: "ゴルフ場ピックアップ / ドロップ案内",
+        golfCard1Title: "ゴルフ場往復送迎",
+        golfCard1Body1: "ゴルフ場往復移動のためのピックアップ・ドロップサービスを提供します。",
+        golfCard1Body2: "宿泊先からゴルフ場まで、ラウンド終了後の復路まで快適に移動できます。",
+        golfCard2Title: "宿泊先からゴルフ場まで",
+        golfCard2Body1: "ご予約時に入力された宿泊先からティーオフ時間に合わせてお迎えします。",
+        golfCard2Body2: "移動時間と準備時間を考慮して出発時間を事前にご案内します。",
+        golfCard3Title: "ラウンド終了後に宿泊先へ",
+        golfCard3Body1: "ラウンド終了後は宿泊先まで安全にお送りします。",
+        golfCard3Body2: "現地進行状況により出発時間は柔軟に調整される場合があります。",
+        golfCard4Title: "ゴルフ日程基準で運行",
+        golfCard4Item1: "ティーオフ時間を基準にお迎え時間が調整されます。",
+        golfCard4Item2: "ゴルフ場の位置、距離、交通状況によって移動時間が変わることがあります。",
+        golfCard4Item3: "予約時間が変更された場合は必ず事前共有をお願いします。",
+        golfNote1: "※ 那覇以外の宿泊先は追加料金が発生する場合があります。",
+        golfNote2: "※ ゴルフ場待機や追加移動が発生した場合は別途料金をご案内します。",
+        pricingSectionTitle: "予約と料金計算のご案内",
+        pricingCard1Title: "地域別 片道 / 往復 計算対応",
+        pricingCard1Body: "予約詳細ページでは<strong>地域、車種、片道/往復</strong>を選ぶと予想合計金額がすぐに計算されます。",
+        pricingCard1Item1: "表示金額は片道基準です。",
+        pricingCard1Item2: "往復は同一地域基準で2倍自動計算されます。",
+        pricingCard1Item3: "アルファード7人乗り / ハイエース10人乗り基準で料金が分かれています。",
+        pricingCard2Title: "追加案内",
+        pricingCard2Body: "時間超過時は<strong>30分 3,000円 / 1時間 6,000円</strong>の追加料金が発生する場合があります。",
+        pricingCard2Item1: "深夜移動や追加経由がある場合は別途ご案内します。",
+        pricingCard2Item2: "空港、ゴルフ場、宿泊先以外の目的地連携もご相談可能です。",
+        pricingCard2Item3: "最終金額は予約確定前に運営チームより再案内します。",
+        pricingButton: "予約詳細ページへ",
+        pdfSectionTitle: "料金表のご案内",
+        pdfSectionBody: "下記PDFから送迎サービス料金表をすぐにご確認いただけます。",
+        pdfWarning: "※ 送迎料金表の金額は片道基準であり、往復料金ではありません。",
+        pdfCard1Title: "送迎料金表",
+        pdfCard1Body: "お客様向けの基本ピックアップ / ドロップ料金表です。",
+        pdfCard1Warning: "片道料金基準 / 往復料金ではありません",
+        pdfCard2Title: "沖縄エリア別料金表",
+        pdfCard2Body: "地域基準の移動料金を確認できるPDFです。",
+        pdfOpen: "PDFを開く",
+        pdfDownload: "ダウンロード"
+      }
+    };
+
+    const descriptionMeta = document.querySelector('meta[name="description"]');
+    const langButtons = Array.from(document.querySelectorAll("[data-lang-button]"));
+
+    function getLanguage() {
+      return window.localStorage.getItem(LANGUAGE_STORAGE_KEY) === "jp" ? "jp" : "kr";
+    }
+
+    function applyLanguage(nextLanguage) {
+      const copy = COPY[nextLanguage];
+      document.documentElement.lang = nextLanguage === "jp" ? "ja" : "ko";
+      document.documentElement.setAttribute("data-lang", nextLanguage);
+      document.title = copy.pageTitle;
+      if (descriptionMeta) {
+        descriptionMeta.content = copy.metaDescription;
+      }
+
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const key = element.dataset.i18n;
+        if (key in copy) {
+          element.textContent = copy[key];
+        }
+      });
+
+      document.querySelectorAll("[data-i18n-html]").forEach((element) => {
+        const key = element.dataset.i18nHtml;
+        if (key in copy) {
+          element.innerHTML = copy[key];
+        }
+      });
+
+      document.querySelectorAll("[data-i18n-alt]").forEach((element) => {
+        const key = element.dataset.i18nAlt;
+        if (key in copy) {
+          element.alt = copy[key];
+        }
+      });
+
+      document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+        const key = element.dataset.i18nAriaLabel;
+        if (key in copy) {
+          element.setAttribute("aria-label", copy[key]);
+        }
+      });
+
+      langButtons.forEach((button) => {
+        const active = button.dataset.langButton === nextLanguage;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+    }
+
+    const currentLanguage = getLanguage();
+    applyLanguage(currentLanguage);
+
+    langButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const nextLanguage = button.dataset.langButton;
+        if (!nextLanguage || nextLanguage === document.documentElement.getAttribute("data-lang")) {
+          return;
+        }
+        window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
+        applyLanguage(nextLanguage);
+      });
+    });
+  </script>
+</body>
+</html>

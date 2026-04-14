@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko" data-lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>okioki rent a car | 북부 하루완성코스</title>
+  <meta name="description" content="오키나와 북부 핵심 관광지를 편안하게 둘러보는 프라이빗 북부 투어입니다.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Outfit:wght@400;500;600;700;800&family=SUIT:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    .tour-detail-page { padding: 32px 32px 72px; display: grid; gap: 24px; }
+    .tour-detail-panel, .tour-detail-slot, .tour-detail-grid article { background: rgba(255,255,255,0.94); border: 1px solid rgba(165,186,213,0.26); box-shadow: 0 22px 48px rgba(15,31,54,0.09); border-radius: 28px; }
+    .tour-detail-panel { padding: 28px; display: grid; gap: 18px; }
+    .tour-detail-hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 22px; align-items: stretch; }
+    .tour-detail-copy { display: grid; gap: 14px; align-content: start; }
+    .tour-detail-copy h1, .tour-detail-slot h2, .tour-detail-grid h3, .tour-detail-inclusion-card h3, .tour-detail-photo figcaption { margin: 0; letter-spacing: -0.04em; color: #163255; }
+    .tour-detail-copy p, .tour-detail-grid p, .tour-detail-slot p, .tour-detail-note { margin: 0; color: #58708e; line-height: 1.78; }
+    .tour-detail-badge { display: inline-flex; width: fit-content; min-height: 36px; align-items: center; padding: 0 14px; border-radius: 999px; background: #2d7cf0; color: #fff; font-weight: 800; }
+    .tour-detail-visual { overflow: hidden; border-radius: 24px; min-height: 320px; background: linear-gradient(180deg, #f7fbff, #eaf2ff); border: 1px solid rgba(179,198,226,0.4); box-shadow: 0 18px 36px rgba(19,45,79,0.08); }
+    .tour-detail-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .tour-detail-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .tour-detail-grid article { padding: 22px; display: grid; gap: 14px; align-content: start; }
+    .tour-detail-list { margin: 0; padding-left: 20px; color: #38516f; line-height: 1.72; }
+    .tour-detail-list li + li { margin-top: 6px; }
+    .tour-detail-slot { padding: 24px; display: grid; gap: 14px; }
+    .tour-route-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+    .tour-route-list li { padding: 14px 16px; border-radius: 18px; background: linear-gradient(180deg, rgba(241,247,255,0.98), rgba(231,240,255,0.96)); border: 1px solid rgba(171,194,222,0.4); color: #163255; font-weight: 700; letter-spacing: -0.02em; }
+    .tour-detail-inclusion-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .tour-detail-inclusion-card { padding: 22px; border-radius: 22px; background: linear-gradient(180deg, rgba(246,250,255,0.98), rgba(236,244,255,0.96)); border: 1px solid rgba(171,194,222,0.4); display: grid; gap: 14px; }
+    .tour-detail-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .tour-detail-photo { overflow: hidden; border-radius: 22px; background: #f6f9ff; border: 1px solid rgba(171,194,222,0.4); box-shadow: 0 14px 32px rgba(18,43,76,0.08); }
+    .tour-detail-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+    .tour-detail-photo figcaption { padding: 14px 16px 16px; font-weight: 700; letter-spacing: -0.02em; }
+    .tour-action-row { display: flex; gap: 12px; flex-wrap: wrap; padding-top: 6px; }
+    .tour-action-button { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 24px; border-radius: 999px; background: linear-gradient(135deg, #1f76ff, #0f5ed8); color: #fff; font-weight: 800; text-decoration: none; box-shadow: 0 16px 30px rgba(31,118,255,0.24); }
+    .tour-action-button.secondary { background: #edf4ff; color: #235cb0; box-shadow: none; }
+    @media (max-width: 960px) { .tour-detail-page { padding: 18px 18px 56px; } .tour-detail-hero, .tour-detail-grid, .tour-detail-inclusion-grid { grid-template-columns: 1fr; } .tour-detail-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 640px) { .tour-detail-gallery { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="page-bg" id="pageBg"></div>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="./index.html">
+        <img class="brand-logo" src="./okioki.png.png" alt="okioki rent a car logo">
+        <span>
+          <strong>okioki rent a car</strong>
+          <small data-i18n="brandSub">North Private Tour</small>
+        </span>
+      </a>
+      <div class="topbar-tools">
+        <nav class="nav" data-i18n-aria-label="navAria">
+          <a href="./index.html" data-i18n="navHome">홈</a>
+          <a href="./tour.html" data-i18n="navTour">투어상품</a>
+          <a href="./private-tour-request.html" data-i18n="navPrivate">단독투어</a>
+        </nav>
+        <div class="lang-switcher" role="group" aria-label="언어 선택">
+          <button class="lang-switcher__button is-active" type="button" data-lang-button="kr" aria-pressed="true">KR</button>
+          <button class="lang-switcher__button" type="button" data-lang-button="jp" aria-pressed="false">JP</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="tour-detail-page">
+      <section class="tour-detail-panel tour-detail-hero">
+        <div class="tour-detail-copy">
+          <span class="tour-detail-badge" data-i18n="badge">북부</span>
+          <h1 data-i18n="title">북부 하루완성코스</h1>
+          <p data-i18n="hero1">오키나와 북부의 핵심 관광지를 효율적인 동선으로 편하게 이동하는 프라이빗 코스입니다.</p>
+          <p data-i18n="hero2">한국인 차량가이드가 동행하여 한국어로 설명해드리며, 장거리 이동이 필요한 북부 지역도 무리 없이 여유롭게 둘러볼 수 있도록 구성되어 있습니다.</p>
+          <div class="tour-action-row">
+            <a class="tour-action-button" href="./tour-booking-request.html?tour=north" data-i18n="applyBtn">신청하기</a>
+            <a class="tour-action-button secondary" href="./private-tour-request.html" data-i18n="privateBtn">단독투어 보기</a>
+          </div>
+        </div>
+        <div class="tour-detail-visual">
+          <img src="./tour-north-canva.png" data-i18n-alt="heroAlt" alt="북부 하루완성코스 메인 이미지">
+        </div>
+      </section>
+
+      <section class="tour-detail-grid">
+        <article>
+          <h3 data-i18n="introTitle">코스 소개</h3>
+          <p data-i18n="introBody1">북부 하루 코스는 오키나와를 대표하는 풍경과 인기 관광지를 하루에 묶어 편하게 보는 일정입니다.</p>
+          <p data-i18n="introBody2">만좌모, 고우리섬, 츄라우미수족관을 중심으로 이동 시간을 줄이고 관광에 집중할 수 있게 정리했습니다.</p>
+        </article>
+        <article>
+          <h3 data-i18n="targetTitle">추천 대상</h3>
+          <ul class="tour-detail-list">
+            <li data-i18n="target1">처음 오키나와를 방문하시는 분</li>
+            <li data-i18n="target2">부모님과 함께하는 여행</li>
+            <li data-i18n="target3">렌터카 운전이 부담스러운 분</li>
+            <li data-i18n="target4">이동 시간을 줄이고 관광에 집중하고 싶은 분</li>
+          </ul>
+        </article>
+        <article>
+          <h3 data-i18n="moveTitle">이동 방식</h3>
+          <p data-i18n="moveBody1">전용 차량으로 이동하며, 한국인 차량가이드가 동행해 숙소 기준 픽업부터 종료까지 편안하게 안내합니다.</p>
+          <p data-i18n="moveBody2">운전에 대한 부담 없이 북부의 대표 코스를 효율적으로 둘러볼 수 있습니다.</p>
+        </article>
+      </section>
+
+      <section class="tour-detail-slot">
+        <h2 data-i18n="routeTitle">코스 구성</h2>
+        <p data-i18n="routeLead">북부 일정은 아래 순서로 진행됩니다.</p>
+        <p class="tour-detail-note" data-i18n="routeNotice">※ 일정은 예시이며 당일 상황에 따라 일부 변경될 수 있습니다.</p>
+        <ol class="tour-route-list">
+          <li data-i18n="route1">나하</li>
+          <li data-i18n="route2">만좌모</li>
+          <li data-i18n="route3">고우리섬</li>
+          <li data-i18n="route4">츄라우미수족관</li>
+          <li data-i18n="route5">아메리칸빌리지 (교통상황에 따라 취소될 수 있음)</li>
+          <li data-i18n="route6">복귀</li>
+        </ol>
+      </section>
+
+      <section class="tour-detail-slot">
+        <h2 data-i18n="includeTitle">포함 / 불포함 사항</h2>
+        <div class="tour-detail-inclusion-grid">
+          <article class="tour-detail-inclusion-card">
+            <h3 data-i18n="includedLabel">포함 사항</h3>
+            <ul class="tour-detail-list">
+              <li data-i18n="included1">전용 차량</li>
+              <li data-i18n="included2">기사</li>
+              <li data-i18n="included3">한국인 차량가이드</li>
+              <li data-i18n="included4">숙소 기준 픽업 및 드롭</li>
+              <li data-i18n="included5">일정 운영 및 이동 서비스</li>
+              <li data-i18n="included6">기본 여행 안내 지원</li>
+            </ul>
+          </article>
+          <article class="tour-detail-inclusion-card">
+            <h3 data-i18n="excludedLabel">불포함 사항</h3>
+            <ul class="tour-detail-list">
+              <li data-i18n="excluded1">관광지 입장료</li>
+              <li data-i18n="excluded2">식사 및 음료 비용</li>
+              <li data-i18n="excluded3">개인 경비</li>
+              <li data-i18n="excluded4">기타 선택 비용</li>
+            </ul>
+          </article>
+        </div>
+        <p class="tour-detail-note" data-i18n="note1">※ 입장료 및 식사 비용은 현지에서 개별 지불입니다.</p>
+      </section>
+
+      <section class="tour-detail-slot">
+        <h2 data-i18n="galleryTitle">북부 대표 이미지</h2>
+        <p data-i18n="galleryLead">기존 대표 이미지 4장에 새로 주신 사진을 추가해 함께 볼 수 있게 정리했습니다.</p>
+        <div class="tour-detail-gallery">
+          <figure class="tour-detail-photo"><img src="./north-gallery-01.jpg" data-i18n-alt="galleryAlt1" alt="에메랄드 비치"><figcaption data-i18n="gallery1">에메랄드 비치</figcaption></figure>
+          <figure class="tour-detail-photo"><img src="./north-gallery-02.jpg" data-i18n-alt="galleryAlt2" alt="츄라우미 수족관"><figcaption data-i18n="gallery2">츄라우미 수족관</figcaption></figure>
+          <figure class="tour-detail-photo"><img src="./north-gallery-03.jpg" data-i18n-alt="galleryAlt3" alt="고우리대교"><figcaption data-i18n="gallery3">고우리대교</figcaption></figure>
+          <figure class="tour-detail-photo"><img src="./north-gallery-04.jpg" data-i18n-alt="galleryAlt4" alt="만좌모"><figcaption data-i18n="gallery4">만좌모</figcaption></figure>
+          <figure class="tour-detail-photo"><img src="./north-gallery-05.jpg" data-i18n-alt="galleryAlt5" alt="고우리지마 하트바위 석양"><figcaption data-i18n="gallery5">고우리지마 하트바위 석양</figcaption></figure>
+          <figure class="tour-detail-photo"><img src="./north-gallery-06.jpg" data-i18n-alt="galleryAlt6" alt="츄라우미 오키짱쇼"><figcaption data-i18n="gallery6">츄라우미 오키짱쇼</figcaption></figure>
+          <figure class="tour-detail-photo"><img src="./north-gallery-07.jpg" data-i18n-alt="galleryAlt7" alt="고우리지마 하트바위"><figcaption data-i18n="gallery7">고우리지마 하트바위</figcaption></figure>
+          <figure class="tour-detail-photo"><img src="./north-gallery-08.jpg" data-i18n-alt="galleryAlt8" alt="츄라우미 수족관 외관"><figcaption data-i18n="gallery8">츄라우미 수족관 외관</figcaption></figure>
+          <figure class="tour-detail-photo"><img src="./north-gallery-09.jpg" data-i18n-alt="galleryAlt9" alt="츄라우미 수족관 포토존"><figcaption data-i18n="gallery9">츄라우미 수족관 포토존</figcaption></figure>
+          <figure class="tour-detail-photo"><img src="./north-gallery-10.jpg" data-i18n-alt="galleryAlt10" alt="나고 파인애플 파크"><figcaption data-i18n="gallery10">나고 파인애플 파크</figcaption></figure>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const LANGUAGE_STORAGE_KEY = "rentcarPublicLanguageV1";
+    const COPY = {
+      kr: {
+        pageTitle: "okioki rent a car | 북부 하루완성코스",
+        metaDescription: "오키나와 북부 핵심 관광지를 편안하게 둘러보는 프라이빗 북부 투어입니다.",
+        brandSub: "North Private Tour",
+        navAria: "주요 메뉴",
+        navHome: "홈",
+        navTour: "투어상품",
+        navPrivate: "단독투어",
+        badge: "북부",
+        title: "북부 하루완성코스",
+        hero1: "오키나와 북부의 핵심 관광지를 효율적인 동선으로 편하게 이동하는 프라이빗 코스입니다.",
+        hero2: "한국인 차량가이드가 동행하여 한국어로 설명해드리며, 장거리 이동이 필요한 북부 지역도 무리 없이 여유롭게 둘러볼 수 있도록 구성되어 있습니다.",
+        applyBtn: "신청하기",
+        privateBtn: "단독투어 보기",
+        heroAlt: "북부 하루완성코스 메인 이미지",
+        introTitle: "코스 소개",
+        introBody1: "북부 하루 코스는 오키나와를 대표하는 풍경과 인기 관광지를 하루에 묶어 편하게 보는 일정입니다.",
+        introBody2: "만좌모, 고우리섬, 츄라우미수족관을 중심으로 이동 시간을 줄이고 관광에 집중할 수 있게 정리했습니다.",
+        targetTitle: "추천 대상",
+        target1: "처음 오키나와를 방문하시는 분",
+        target2: "부모님과 함께하는 여행",
+        target3: "렌터카 운전이 부담스러운 분",
+        target4: "이동 시간을 줄이고 관광에 집중하고 싶은 분",
+        moveTitle: "이동 방식",
+        moveBody1: "전용 차량으로 이동하며, 한국인 차량가이드가 동행해 숙소 기준 픽업부터 종료까지 편안하게 안내합니다.",
+        moveBody2: "운전에 대한 부담 없이 북부의 대표 코스를 효율적으로 둘러볼 수 있습니다.",
+        routeTitle: "코스 구성",
+        routeLead: "북부 일정은 아래 순서로 진행됩니다.",
+        routeNotice: "※ 일정은 예시이며 당일 상황에 따라 일부 변경될 수 있습니다.",
+        route1: "나하",
+        route2: "만좌모",
+        route3: "고우리섬",
+        route4: "츄라우미수족관",
+        route5: "아메리칸빌리지 (교통상황에 따라 취소될 수 있음)",
+        route6: "복귀",
+        includeTitle: "포함 / 불포함 사항",
+        includedLabel: "포함 사항",
+        included1: "전용 차량",
+        included2: "기사",
+        included3: "한국인 차량가이드",
+        included4: "숙소 기준 픽업 및 드롭",
+        included5: "일정 운영 및 이동 서비스",
+        included6: "기본 여행 안내 지원",
+        excludedLabel: "불포함 사항",
+        excluded1: "관광지 입장료",
+        excluded2: "식사 및 음료 비용",
+        excluded3: "개인 경비",
+        excluded4: "기타 선택 비용",
+        note1: "※ 입장료 및 식사 비용은 현지에서 개별 지불입니다.",
+        galleryTitle: "북부 대표 이미지",
+        galleryLead: "기존 대표 이미지 4장에 새로 주신 사진을 추가해 함께 볼 수 있게 정리했습니다.",
+        gallery1: "에메랄드 비치",
+        gallery2: "츄라우미 수족관",
+        gallery3: "고우리대교",
+        gallery4: "만좌모",
+        gallery5: "고우리지마 하트바위 석양",
+        gallery6: "츄라우미 오키짱쇼",
+        gallery7: "고우리지마 하트바위",
+        gallery8: "츄라우미 수족관 외관",
+        gallery9: "츄라우미 수족관 포토존",
+        gallery10: "나고 파인애플 파크",
+        galleryAlt1: "에메랄드 비치",
+        galleryAlt2: "츄라우미 수족관",
+        galleryAlt3: "고우리대교",
+        galleryAlt4: "만좌모",
+        galleryAlt5: "고우리지마 하트바위 석양",
+        galleryAlt6: "츄라우미 오키짱쇼",
+        galleryAlt7: "고우리지마 하트바위",
+        galleryAlt8: "츄라우미 수족관 외관",
+        galleryAlt9: "츄라우미 수족관 포토존",
+        galleryAlt10: "나고 파인애플 파크"
+      },
+      jp: {
+        pageTitle: "okioki rent a car | 北部1日完成コース",
+        metaDescription: "沖縄北部の人気観光地を快適に巡るプライベート北部ツアーです。",
+        brandSub: "North Private Tour",
+        navAria: "メインメニュー",
+        navHome: "ホーム",
+        navTour: "ツアー商品",
+        navPrivate: "プライベートツアー",
+        badge: "北部",
+        title: "北部1日完成コース",
+        hero1: "沖縄北部の核心観光地を効率的な動線で快適に巡るプライベートコースです。",
+        hero2: "韓国人車両ガイドが同行し韓国語でご案内します。長距離移動が必要な北部エリアも無理なくゆったり回れるよう構成しています。",
+        applyBtn: "申し込む",
+        privateBtn: "プライベートツアーを見る",
+        heroAlt: "北部1日完成コース メインイメージ",
+        introTitle: "コース紹介",
+        introBody1: "北部1日コースは沖縄を代表する風景と人気観光地を1日で気軽に巡る日程です。",
+        introBody2: "万座毛、古宇利島、美ら海水族館を中心に移動時間を減らし、観光に集中しやすく整理しています。",
+        targetTitle: "おすすめ対象",
+        target1: "初めて沖縄を訪れる方",
+        target2: "ご両親と一緒の旅行",
+        target3: "レンタカー運転が負担な方",
+        target4: "移動時間を減らして観光に集中したい方",
+        moveTitle: "移動方式",
+        moveBody1: "専用車両で移動し、韓国人車両ガイドが同行して宿泊先基準のピックアップから終了まで快適にご案内します。",
+        moveBody2: "運転の負担なく北部の代表コースを効率よく巡ることができます。",
+        routeTitle: "コース構成",
+        routeLead: "北部日程は下記の順で進行します。",
+        routeNotice: "※ 日程は一例であり、当日の状況により一部変更される場合があります。",
+        route1: "那覇",
+        route2: "万座毛",
+        route3: "古宇利島",
+        route4: "美ら海水族館",
+        route5: "アメリカンビレッジ (交通状況により中止の場合あり)",
+        route6: "復帰",
+        includeTitle: "含まれるもの / 含まれないもの",
+        includedLabel: "含まれるもの",
+        included1: "専用車両",
+        included2: "ドライバー",
+        included3: "韓国人車両ガイド",
+        included4: "宿泊先基準のピックアップ / ドロップ",
+        included5: "日程運営および移動サービス",
+        included6: "基本旅行案内サポート",
+        excludedLabel: "含まれないもの",
+        excluded1: "観光地入場料",
+        excluded2: "食事および飲料費",
+        excluded3: "個人経費",
+        excluded4: "その他の選択費用",
+        note1: "※ 入場料と食事代は現地で個別にお支払いください。",
+        galleryTitle: "北部代表イメージ",
+        galleryLead: "既存の代表イメージ4枚に、新しくいただいた写真を追加して一緒に見られるよう整理しました。",
+        gallery1: "エメラルドビーチ",
+        gallery2: "美ら海水族館",
+        gallery3: "古宇利大橋",
+        gallery4: "万座毛",
+        gallery5: "古宇利島 ハートロックの夕景",
+        gallery6: "美ら海 オキちゃんショー",
+        gallery7: "古宇利島 ハートロック",
+        gallery8: "美ら海水族館 外観",
+        gallery9: "美ら海水族館 フォトスポット",
+        gallery10: "ナゴパイナップルパーク",
+        galleryAlt1: "エメラルドビーチ",
+        galleryAlt2: "美ら海水族館",
+        galleryAlt3: "古宇利大橋",
+        galleryAlt4: "万座毛",
+        galleryAlt5: "古宇利島 ハートロックの夕景",
+        galleryAlt6: "美ら海 オキちゃんショー",
+        galleryAlt7: "古宇利島 ハートロック",
+        galleryAlt8: "美ら海水族館 外観",
+        galleryAlt9: "美ら海水族館 フォトスポット",
+        galleryAlt10: "ナゴパイナップルパーク"
+      }
+    };
+
+    const descriptionMeta = document.querySelector('meta[name="description"]');
+    const langButtons = Array.from(document.querySelectorAll("[data-lang-button]"));
+
+    function getLanguage() {
+      return window.localStorage.getItem(LANGUAGE_STORAGE_KEY) === "jp" ? "jp" : "kr";
+    }
+
+    function applyLanguage(nextLanguage) {
+      const copy = COPY[nextLanguage];
+      document.documentElement.lang = nextLanguage === "jp" ? "ja" : "ko";
+      document.documentElement.setAttribute("data-lang", nextLanguage);
+      document.title = copy.pageTitle;
+      if (descriptionMeta) {
+        descriptionMeta.content = copy.metaDescription;
+      }
+
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        element.textContent = copy[element.dataset.i18n] ?? "";
+      });
+      document.querySelectorAll("[data-i18n-alt]").forEach((element) => {
+        element.alt = copy[element.dataset.i18nAlt] ?? "";
+      });
+      document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+        element.setAttribute("aria-label", copy[element.dataset.i18nAriaLabel] ?? "");
+      });
+
+      langButtons.forEach((button) => {
+        const active = button.dataset.langButton === nextLanguage;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+    }
+
+    const initialLanguage = getLanguage();
+    applyLanguage(initialLanguage);
+
+    langButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const nextLanguage = button.dataset.langButton === "jp" ? "jp" : "kr";
+        window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
+        applyLanguage(nextLanguage);
+      });
+    });
+  </script>
+</body>
+</html>

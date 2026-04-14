@@ -1,0 +1,283 @@
+﻿<!DOCTYPE html>
+<html lang="ko" data-lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>okioki rent a car | 중부 감성 드라이브</title>
+  <meta name="description" content="오키나와 중부의 바다와 섬 포인트를 전용 차량으로 편안하게 즐기는 프라이빗 드라이브 코스입니다.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Outfit:wght@400;500;600;700;800&family=SUIT:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    .tour-detail-page { padding: 32px 32px 72px; display: grid; gap: 24px; }
+    .tour-detail-panel, .tour-detail-slot, .tour-detail-grid article { background: rgba(255,255,255,0.94); border: 1px solid rgba(165,186,213,0.26); box-shadow: 0 22px 48px rgba(15,31,54,0.09); border-radius: 28px; }
+    .tour-detail-panel { padding: 28px; display: grid; gap: 18px; }
+    .tour-detail-hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 22px; align-items: stretch; }
+    .tour-detail-copy { display: grid; gap: 14px; align-content: start; }
+    .tour-detail-copy h1, .tour-detail-slot h2, .tour-detail-grid h3, .tour-detail-inclusion-card h3, .tour-detail-photo figcaption { margin: 0; letter-spacing: -0.04em; color: #163255; }
+    .tour-detail-copy p, .tour-detail-grid p, .tour-detail-slot p, .tour-detail-note { margin: 0; color: #58708e; line-height: 1.78; }
+    .tour-detail-badge { display: inline-flex; width: fit-content; min-height: 36px; align-items: center; padding: 0 14px; border-radius: 999px; background: #39a75d; color: #fff; font-weight: 800; }
+    .tour-detail-visual { overflow: hidden; border-radius: 24px; min-height: 320px; background: linear-gradient(180deg, #f7fbff, #eaf2ff); border: 1px solid rgba(179,198,226,0.4); box-shadow: 0 18px 36px rgba(19,45,79,0.08); }
+    .tour-detail-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .tour-detail-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .tour-detail-grid article { padding: 22px; display: grid; gap: 14px; align-content: start; }
+    .tour-detail-list { margin: 0; padding-left: 20px; color: #38516f; line-height: 1.72; }
+    .tour-detail-list li + li { margin-top: 6px; }
+    .tour-detail-slot { padding: 24px; display: grid; gap: 14px; }
+    .tour-route-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+    .tour-route-list li { padding: 14px 16px; border-radius: 18px; background: linear-gradient(180deg, rgba(244,251,246,0.98), rgba(233,245,237,0.96)); border: 1px solid rgba(168,207,180,0.45); color: #163255; font-weight: 700; letter-spacing: -0.02em; }
+    .tour-detail-inclusion-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .tour-detail-inclusion-card { padding: 22px; border-radius: 22px; background: linear-gradient(180deg, rgba(244,251,246,0.98), rgba(233,245,237,0.96)); border: 1px solid rgba(168,207,180,0.45); display: grid; gap: 14px; }
+    .tour-detail-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .tour-detail-photo { overflow: hidden; border-radius: 22px; background: #f6f9ff; border: 1px solid rgba(171,194,222,0.4); box-shadow: 0 14px 32px rgba(18,43,76,0.08); }
+    .tour-detail-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+    .tour-detail-photo figcaption { padding: 14px 16px 16px; font-weight: 700; letter-spacing: -0.02em; }
+    .tour-action-row { display: flex; gap: 12px; flex-wrap: wrap; padding-top: 6px; }
+    .tour-action-button { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 24px; border-radius: 999px; background: linear-gradient(135deg, #39a75d, #258447); color: #fff; font-weight: 800; text-decoration: none; box-shadow: 0 16px 30px rgba(57,167,93,0.24); }
+    .tour-action-button.secondary { background: #edf8f0; color: #2f8048; box-shadow: none; }
+    @media (max-width: 960px) {
+      .tour-detail-page { padding: 18px 18px 56px; }
+      .tour-detail-hero, .tour-detail-grid, .tour-detail-inclusion-grid { grid-template-columns: 1fr; }
+      .tour-detail-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px) {
+      .tour-detail-gallery { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-bg" id="pageBg"></div>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="./index.html">
+        <img class="brand-logo" src="./okioki.png.png" alt="okioki rent a car logo">
+        <span>
+          <strong>okioki rent a car</strong>
+          <small data-lang-kr="Central Scenic Tour" data-lang-jp="Central Scenic Tour">Central Scenic Tour</small>
+        </span>
+      </a>
+      <div class="topbar-tools">
+        <nav class="nav" data-aria-kr="메인 메뉴" data-aria-jp="メインメニュー" aria-label="메인 메뉴">
+          <a href="./index.html" data-lang-kr="홈" data-lang-jp="ホーム">홈</a>
+          <a href="./tour.html" data-lang-kr="투어 코스" data-lang-jp="ツアーコース">투어 코스</a>
+          <a href="./private-tour-request.html" data-lang-kr="단독투어" data-lang-jp="プライベートツアー">단독투어</a>
+        </nav>
+        <div class="lang-switcher" role="group" aria-label="언어 전환">
+          <button class="lang-switcher__button is-active" type="button" data-lang-button="kr" aria-pressed="true">KR</button>
+          <button class="lang-switcher__button" type="button" data-lang-button="jp" aria-pressed="false">JP</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="tour-detail-page">
+      <section class="tour-detail-panel tour-detail-hero">
+        <div class="tour-detail-copy">
+          <span class="tour-detail-badge" data-lang-kr="중부" data-lang-jp="中部">중부</span>
+          <h1 data-lang-kr="중부 감성 드라이브" data-lang-jp="中部感性ドライブ">중부 감성 드라이브</h1>
+          <p data-lang-kr="바다와 섬을 따라 오키나와의 시작을 만나는 중부 대표 프라이빗 드라이브 코스입니다." data-lang-jp="海と島をたどりながら沖縄の始まりを感じる中部代表のプライベートドライブコースです。">바다와 섬을 따라 오키나와의 시작을 만나는 중부 대표 프라이빗 드라이브 코스입니다.</p>
+          <p data-lang-kr="한국인 차량가이드가 동행해 한국어로 안내해드리며, 해중도로와 하마히가섬, 이케이지마까지 여유롭게 이어지는 하루 일정으로 구성되어 있습니다." data-lang-jp="韓国人車両ガイドが同行し、韓国語でご案内します。海中道路、浜比嘉島、伊計島までゆったり続く一日コースです。">한국인 차량가이드가 동행해 한국어로 안내해드리며, 해중도로와 하마히가섬, 이케이지마까지 여유롭게 이어지는 하루 일정으로 구성되어 있습니다.</p>
+          <div class="tour-action-row">
+            <a class="tour-action-button" href="./tour-booking-request.html?tour=central" data-lang-kr="신청하기" data-lang-jp="予約する">신청하기</a>
+            <a class="tour-action-button secondary" href="./private-tour-request.html" data-lang-kr="단독투어 보기" data-lang-jp="貸切ツアーを見る">단독투어 보기</a>
+          </div>
+        </div>
+        <div class="tour-detail-visual">
+          <img src="./central-drive-card.jpg" data-alt-kr="중부 감성 드라이브 메인 이미지" data-alt-jp="中部感性ドライブのメインイメージ" alt="중부 감성 드라이브 메인 이미지">
+        </div>
+      </section>
+
+      <section class="tour-detail-grid">
+        <article>
+          <h3 data-lang-kr="코스 소개" data-lang-jp="コース紹介">코스 소개</h3>
+          <p data-lang-kr="나하에서 출발해 해중도로 드라이브, 하마히가섬 점심, 카후반타, 아마미츄의 무덤, 이케이지마까지 이어지는 중부 대표 코스입니다." data-lang-jp="那覇を出発し、海中道路ドライブ、浜比嘉島ランチ、果報バンタ、アマミチューの墓、伊計島まで続く中部代表コースです。">나하에서 출발해 해중도로 드라이브, 하마히가섬 점심, 카후반타, 아마미츄의 무덤, 이케이지마까지 이어지는 중부 대표 코스입니다.</p>
+          <p data-lang-kr="장거리 이동 부담이 적고 바다 전망, 섬 분위기, 카페와 산책 포인트를 한 번에 묶기 좋아 여유롭게 즐기기 좋습니다." data-lang-jp="長距離移動の負担が少なく、海の景色、島の雰囲気、カフェや散策ポイントを一度に楽しめる余裕あるコースです。">장거리 이동 부담이 적고 바다 전망, 섬 분위기, 카페와 산책 포인트를 한 번에 묶기 좋아 여유롭게 즐기기 좋습니다.</p>
+        </article>
+        <article>
+          <h3 data-lang-kr="추천 대상" data-lang-jp="おすすめ対象">추천 대상</h3>
+          <ul class="tour-detail-list">
+            <li data-lang-kr="처음 오키나와를 방문하시는 분" data-lang-jp="初めて沖縄を訪れる方">처음 오키나와를 방문하시는 분</li>
+            <li data-lang-kr="렌터카 운전이 부담스러운 분" data-lang-jp="レンタカーの運転が負担な方">렌터카 운전이 부담스러운 분</li>
+            <li data-lang-kr="바다 풍경과 섬 드라이브를 한 번에 보고 싶은 분" data-lang-jp="海の景色と島ドライブを一度に楽しみたい方">바다 풍경과 섬 드라이브를 한 번에 보고 싶은 분</li>
+            <li data-lang-kr="짧은 이동으로 여유 있게 하루를 보내고 싶은 분" data-lang-jp="短い移動でゆったり一日を過ごしたい方">짧은 이동으로 여유 있게 하루를 보내고 싶은 분</li>
+          </ul>
+        </article>
+        <article>
+          <h3 data-lang-kr="이동 방식" data-lang-jp="移動方式">이동 방식</h3>
+          <p data-lang-kr="전용 차량으로 이동하며 한국인 차량가이드가 동행해 한국어로 설명해드립니다. 픽업부터 종료까지 편안하게 이어지는 일정입니다." data-lang-jp="専用車で移動し、韓国人車両ガイドが同行して韓国語でご案内します。ピックアップから終了まで快適にご利用いただけます。">전용 차량으로 이동하며 한국인 차량가이드가 동행해 한국어로 설명해드립니다. 픽업부터 종료까지 편안하게 이어지는 일정입니다.</p>
+          <p data-lang-kr="숙소 위치와 당일 상황에 맞춰 동선을 조정할 수 있어 이동 시간을 줄이고 관광에 집중하기 좋습니다." data-lang-jp="宿泊先の位置と当日の状況に合わせて動線を調整できるため、移動時間を減らして観光に集中しやすいです。">숙소 위치와 당일 상황에 맞춰 동선을 조정할 수 있어 이동 시간을 줄이고 관광에 집중하기 좋습니다.</p>
+        </article>
+      </section>
+
+      <section class="tour-detail-slot">
+        <h2 data-lang-kr="코스 구성" data-lang-jp="コース構成">코스 구성</h2>
+        <p data-lang-kr="중부 감성 드라이브는 아래 순서로 진행됩니다." data-lang-jp="中部感性ドライブは以下の順で進行します。">중부 감성 드라이브는 아래 순서로 진행됩니다.</p>
+        <p class="tour-detail-note" data-lang-kr="※ 일정은 예시이며 당일 상황에 따라 일부 변경될 수 있습니다." data-lang-jp="※ 日程は一例であり、当日の状況により一部変更となる場合があります。">※ 일정은 예시이며 당일 상황에 따라 일부 변경될 수 있습니다.</p>
+        <ol class="tour-route-list">
+          <li data-lang-kr="나하 출발" data-lang-jp="那覇 出発">나하 출발</li>
+          <li data-lang-kr="해중도로 드라이브" data-lang-jp="海中道路ドライブ">해중도로 드라이브</li>
+          <li data-lang-kr="하마히가섬 점심" data-lang-jp="浜比嘉島 ランチ">하마히가섬 점심</li>
+          <li data-lang-kr="카후반타(소금공장)" data-lang-jp="果報バンタ（塩工場）">카후반타(소금공장)</li>
+          <li data-lang-kr="아마미츄의 무덤" data-lang-jp="アマミチューの墓">아마미츄의 무덤</li>
+          <li data-lang-kr="이케이지마 카페 & 바다" data-lang-jp="伊計島 カフェ & 海">이케이지마 카페 & 바다</li>
+          <li data-lang-kr="(선택) 아메리칸 빌리지" data-lang-jp="（選択）アメリカンビレッジ">(선택) 아메리칸 빌리지</li>
+          <li data-lang-kr="나하 도착" data-lang-jp="那覇 到着">나하 도착</li>
+        </ol>
+      </section>
+
+      <section class="tour-detail-slot">
+        <h2 data-lang-kr="포함 / 불포함 사항" data-lang-jp="含まれる内容 / 含まれない内容">포함 / 불포함 사항</h2>
+        <div class="tour-detail-inclusion-grid">
+          <article class="tour-detail-inclusion-card">
+            <h3 data-lang-kr="포함 사항" data-lang-jp="含まれる内容">포함 사항</h3>
+            <ul class="tour-detail-list">
+              <li data-lang-kr="전용 차량 이동" data-lang-jp="専用車での移動">전용 차량 이동</li>
+              <li data-lang-kr="기사" data-lang-jp="ドライバー">기사</li>
+              <li data-lang-kr="한국인 차량가이드" data-lang-jp="韓国人車両ガイド">한국인 차량가이드</li>
+              <li data-lang-kr="숙소 기준 픽업 및 드롭" data-lang-jp="宿泊先基準のピックアップ＆ドロップ">숙소 기준 픽업 및 드롭</li>
+              <li data-lang-kr="일정 운영 및 이동 서비스" data-lang-jp="日程運営および移動サービス">일정 운영 및 이동 서비스</li>
+              <li data-lang-kr="기본 여행 안내 지원" data-lang-jp="基本旅行案内サポート">기본 여행 안내 지원</li>
+            </ul>
+          </article>
+          <article class="tour-detail-inclusion-card">
+            <h3 data-lang-kr="불포함 사항" data-lang-jp="含まれない内容">불포함 사항</h3>
+            <ul class="tour-detail-list">
+              <li data-lang-kr="관광지 입장료" data-lang-jp="観光地入場料">관광지 입장료</li>
+              <li data-lang-kr="식사 및 음료 비용" data-lang-jp="食事および飲料代">식사 및 음료 비용</li>
+              <li data-lang-kr="개인 경비" data-lang-jp="個人経費">개인 경비</li>
+              <li data-lang-kr="기타 선택 비용" data-lang-jp="その他の選択費用">기타 선택 비용</li>
+            </ul>
+          </article>
+        </div>
+        <p class="tour-detail-note" data-lang-kr="※ 아메리칸 빌리지는 교통 상황에 따라 생략될 수 있습니다." data-lang-jp="※ アメリカンビレッジは交通状況により省略される場合があります。">※ 아메리칸 빌리지는 교통 상황에 따라 생략될 수 있습니다.</p>
+      </section>
+
+      <section class="tour-detail-slot">
+        <h2 data-lang-kr="중부 갤러리" data-lang-jp="中部ギャラリー">중부 갤러리</h2>
+        <p data-lang-kr="기존 갤러리는 유지하고, 이번에 주신 사진 중 중복되지 않는 컷만 추가로 정리했습니다." data-lang-jp="既存ギャラリーはそのままに、今回いただいた写真のうち重複しないカットだけを追加で整理しました。">기존 갤러리는 유지하고, 이번에 주신 사진 중 중복되지 않는 컷만 추가로 정리했습니다.</p>
+        <div class="tour-detail-gallery">
+          <figure class="tour-detail-photo">
+            <img src="./central-gallery-01.jpg" data-alt-kr="케이브 오키나와" data-alt-jp="ケイブ沖縄" alt="케이브 오키나와">
+            <figcaption data-lang-kr="케이브 오키나와" data-lang-jp="ケイブ沖縄">케이브 오키나와</figcaption>
+          </figure>
+          <figure class="tour-detail-photo">
+            <img src="./central-gallery-02.jpg" data-alt-kr="비오스의 언덕" data-alt-jp="ビオスの丘" alt="비오스의 언덕">
+            <figcaption data-lang-kr="비오스의 언덕" data-lang-jp="ビオスの丘">비오스의 언덕</figcaption>
+          </figure>
+          <figure class="tour-detail-photo">
+            <img src="./central-gallery-04.jpg" data-alt-kr="이케이지마 바다" data-alt-jp="伊計島の海" alt="이케이지마 바다">
+            <figcaption data-lang-kr="이케이지마 바다" data-lang-jp="伊計島の海">이케이지마 바다</figcaption>
+          </figure>
+          <figure class="tour-detail-photo">
+            <img src="./central-gallery-05.jpg" data-alt-kr="아마미츄의 무덤" data-alt-jp="アマミチューの墓" alt="아마미츄의 무덤">
+            <figcaption data-lang-kr="아마미츄의 무덤" data-lang-jp="アマミチューの墓">아마미츄의 무덤</figcaption>
+          </figure>
+          <figure class="tour-detail-photo">
+            <img src="./central-gallery-06.jpg" data-alt-kr="해중도로 일몰" data-alt-jp="海中道路の夕景" alt="해중도로 일몰">
+            <figcaption data-lang-kr="해중도로 일몰" data-lang-jp="海中道路の夕景">해중도로 일몰</figcaption>
+          </figure>
+          <figure class="tour-detail-photo">
+            <img src="./central-gallery-07.jpg" data-alt-kr="하마히가섬 바다" data-alt-jp="浜比嘉島の海" alt="하마히가섬 바다">
+            <figcaption data-lang-kr="하마히가섬 바다" data-lang-jp="浜比嘉島の海">하마히가섬 바다</figcaption>
+          </figure>
+          <figure class="tour-detail-photo">
+            <img src="./central-gallery-08.jpg" data-alt-kr="이레이 비치" data-alt-jp="伊計ビーチ" alt="이레이 비치">
+            <figcaption data-lang-kr="이레이 비치" data-lang-jp="伊計ビーチ">이레이 비치</figcaption>
+          </figure>
+          <figure class="tour-detail-photo">
+            <img src="./central-gallery-09.jpg" data-alt-kr="아마미츄의 무덤 전경" data-alt-jp="アマミチューの墓 全景" alt="아마미츄의 무덤 전경">
+            <figcaption data-lang-kr="아마미츄의 무덤 전경" data-lang-jp="アマミチューの墓 全景">아마미츄의 무덤 전경</figcaption>
+          </figure>
+          <figure class="tour-detail-photo">
+            <img src="./central-gallery-10.jpg" data-alt-kr="가쓰렌 성터" data-alt-jp="勝連城跡" alt="가쓰렌 성터">
+            <figcaption data-lang-kr="가쓰렌 성터" data-lang-jp="勝連城跡">가쓰렌 성터</figcaption>
+          </figure>
+          <figure class="tour-detail-photo">
+            <img src="./central-gallery-11.jpg" data-alt-kr="이케이대교" data-alt-jp="伊計大橋" alt="이케이대교">
+            <figcaption data-lang-kr="이케이대교" data-lang-jp="伊計大橋">이케이대교</figcaption>
+          </figure>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const LANGUAGE_STORAGE_KEY = "rentcarPublicLanguageV1";
+    const descriptionMeta = document.querySelector('meta[name="description"]');
+    const langButtons = Array.from(document.querySelectorAll('[data-lang-button]'));
+    const metaCopy = {
+      kr: {
+        title: "okioki rent a car | 중부 감성 드라이브",
+        description: "오키나와 중부의 바다와 섬 포인트를 전용 차량으로 편안하게 즐기는 프라이빗 드라이브 코스입니다.",
+        navAria: "메인 메뉴",
+        switcherAria: "언어 전환"
+      },
+      jp: {
+        title: "okioki rent a car | 中部感性ドライブ",
+        description: "沖縄中部の海と島のポイントを専用車で快適に楽しむプライベートドライブコースです。",
+        navAria: "メインメニュー",
+        switcherAria: "言語切替"
+      }
+    };
+
+    function getLanguage() {
+      return window.localStorage.getItem(LANGUAGE_STORAGE_KEY) === "jp" ? "jp" : "kr";
+    }
+
+    function applyLanguage(nextLanguage) {
+      document.documentElement.lang = nextLanguage === "jp" ? "ja" : "ko";
+      document.documentElement.setAttribute("data-lang", nextLanguage);
+      document.title = metaCopy[nextLanguage].title;
+      if (descriptionMeta) {
+        descriptionMeta.content = metaCopy[nextLanguage].description;
+      }
+
+      document.querySelectorAll('[data-lang-kr]').forEach((element) => {
+        const value = nextLanguage === "jp" ? element.dataset.langJp : element.dataset.langKr;
+        if (value) {
+          element.textContent = value;
+        }
+      });
+
+      document.querySelectorAll('[data-alt-kr]').forEach((element) => {
+        const value = nextLanguage === "jp" ? element.dataset.altJp : element.dataset.altKr;
+        if (value) {
+          element.alt = value;
+        }
+      });
+
+      document.querySelectorAll('[data-aria-kr]').forEach((element) => {
+        const value = nextLanguage === "jp" ? element.dataset.ariaJp : element.dataset.ariaKr;
+        if (value) {
+          element.setAttribute('aria-label', value);
+        }
+      });
+
+      const switcher = document.querySelector('.lang-switcher');
+      if (switcher) {
+        switcher.setAttribute('aria-label', metaCopy[nextLanguage].switcherAria);
+      }
+
+      langButtons.forEach((button) => {
+        const active = button.dataset.langButton === nextLanguage;
+        button.classList.toggle('is-active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+    }
+
+    applyLanguage(getLanguage());
+
+    langButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const nextLanguage = button.dataset.langButton;
+        if (!nextLanguage) {
+          return;
+        }
+        window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
+        applyLanguage(nextLanguage);
+      });
+    });
+  </script>
+</body>
+</html>
+

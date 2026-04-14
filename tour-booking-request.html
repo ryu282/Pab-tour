@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>okioki rent a car | 투어 신청하기</title>
+  <meta name="description" content="오키나와 북부, 중부, 남부, 단독투어 예약 신청 폼입니다.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Outfit:wght@400;500;600;700;800&family=SUIT:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    .booking-page { padding: 32px 32px 72px; display: grid; gap: 24px; }
+    .booking-panel, .booking-form-wrap, .booking-guide { background: rgba(255,255,255,0.95); border: 1px solid rgba(165,186,213,0.26); border-radius: 28px; box-shadow: 0 22px 48px rgba(15,31,54,0.09); }
+    .booking-panel { padding: 30px; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 22px; align-items: center; }
+    .booking-copy { display: grid; gap: 14px; }
+    .booking-copy h1, .booking-form-wrap h2, .booking-guide h3 { margin: 0; color: #163255; letter-spacing: -0.04em; }
+    .booking-copy p, .booking-guide li, .booking-form-note, .booking-status { margin: 0; color: #58708e; line-height: 1.78; }
+    .booking-badge { display: inline-flex; width: fit-content; min-height: 36px; align-items: center; padding: 0 14px; border-radius: 999px; background: #1f76ff; color: #fff; font-weight: 800; }
+    .booking-visual { overflow: hidden; border-radius: 24px; min-height: 320px; border: 1px solid rgba(179,198,226,0.4); background: linear-gradient(135deg, #eaf3ff, #f8fbff); }
+    .booking-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .booking-layout { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 24px; }
+    .booking-form-wrap { padding: 28px; display: grid; gap: 18px; }
+    .booking-form { display: grid; gap: 16px; }
+    .booking-field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .booking-field { display: grid; gap: 8px; }
+    .booking-field label { font-weight: 700; color: #163255; }
+    .booking-field input, .booking-field select, .booking-field textarea { width: 100%; min-height: 50px; padding: 12px 14px; border-radius: 16px; border: 1px solid rgba(154,180,214,0.55); background: #f9fbff; color: #163255; }
+    .booking-field textarea { min-height: 132px; resize: vertical; }
+    .booking-field input[readonly] { background: #eef4ff; font-weight: 700; }
+    .booking-guide { padding: 24px; display: grid; gap: 14px; align-content: start; }
+    .booking-guide ul { margin: 0; padding-left: 20px; color: #38516f; line-height: 1.7; }
+    .booking-check { display: flex; align-items: flex-start; gap: 10px; color: #38516f; }
+    .booking-check input { margin-top: 4px; }
+    .booking-submit { display: inline-flex; align-items: center; justify-content: center; min-height: 54px; padding: 0 24px; border: 0; border-radius: 999px; background: linear-gradient(135deg, #1f76ff, #0f5ed8); color: #fff; font-weight: 800; cursor: pointer; box-shadow: 0 16px 30px rgba(31,118,255,0.24); }
+    .booking-submit:disabled { opacity: 0.6; cursor: wait; }
+    .booking-status { padding: 14px 16px; border-radius: 18px; background: #eef5ff; border: 1px solid rgba(171,194,222,0.45); }
+    .booking-status.is-error { background: #fff1ef; border-color: rgba(216,82,67,0.28); color: #a4473b; }
+    .hidden-field { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }
+    @media (max-width: 960px) { .booking-page { padding: 18px 18px 56px; } .booking-panel, .booking-layout, .booking-field-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="page-bg" id="pageBg"></div>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="./index.html">
+        <img class="brand-logo" src="./okioki.png.png" alt="okioki rent a car logo">
+        <span><strong>okioki rent a car</strong><small>Tour Booking</small></span>
+      </a>
+      <div class="topbar-tools">
+        <nav class="nav" aria-label="주요 메뉴">
+          <a href="./index.html">홈</a>
+          <a href="./tour.html">투어상품</a>
+          <a href="./private-tour-request.html">단독투어</a>
+        </nav>
+      </div>
+    </header>
+    <main class="booking-page">
+      <section class="booking-panel">
+        <div class="booking-copy">
+          <span class="booking-badge">투어 신청</span>
+          <h1 id="bookingTitle">투어 신청하기</h1>
+          <p id="bookingLead">선택하신 투어를 기준으로 예약 접수를 진행합니다.</p>
+          <p>희망 날짜와 연락처를 남겨주시면 확인 후 순차적으로 안내드립니다.</p>
+        </div>
+        <div class="booking-visual">
+          <img id="bookingImage" src="./north-whale-card.jpg" alt="투어 예약 이미지">
+        </div>
+      </section>
+      <section class="booking-layout">
+        <div class="booking-form-wrap">
+          <h2>신청(예약) 폼</h2>
+          <p class="booking-form-note">기본 정보와 희망 일정을 남겨주시면 예약 접수 후 확인 연락을 드립니다.</p>
+          <form class="booking-form" id="tourBookingForm">
+            <input class="hidden-field" type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+            <div class="booking-field">
+              <label for="tourName">신청 투어</label>
+              <input id="tourName" name="tourName" type="text" readonly>
+            </div>
+            <div class="booking-field-grid">
+              <div class="booking-field">
+                <label for="preferredDate">희망 날짜</label>
+                <input id="preferredDate" name="preferredDate" type="date" required>
+              </div>
+              <div class="booking-field">
+                <label for="partySize">인원수</label>
+                <select id="partySize" name="partySize" required>
+                  <option value="">선택해주세요</option>
+                  <option value="1-2명">1-2명</option>
+                  <option value="3-4명">3-4명</option>
+                  <option value="5-6명">5-6명</option>
+                  <option value="7명 이상">7명 이상</option>
+                </select>
+              </div>
+            </div>
+            <div class="booking-field-grid">
+              <div class="booking-field">
+                <label for="name">예약자명</label>
+                <input id="name" name="name" type="text" required maxlength="50">
+              </div>
+              <div class="booking-field">
+                <label for="phone">연락처</label>
+                <input id="phone" name="phone" type="tel" required placeholder="010-0000-0000">
+              </div>
+            </div>
+            <div class="booking-field-grid">
+              <div class="booking-field">
+                <label for="email">이메일</label>
+                <input id="email" name="email" type="email" required placeholder="you@example.com">
+              </div>
+              <div class="booking-field">
+                <label for="pickupPlace">픽업 장소 / 숙소</label>
+                <input id="pickupPlace" name="pickupPlace" type="text" placeholder="나하 시내 호텔 / 공항 등">
+              </div>
+            </div>
+            <div class="booking-field">
+              <label for="message">요청사항</label>
+              <textarea id="message" name="message" placeholder="방문 희망 코스, 동반 인원 특이사항, 아이 동반 여부 등을 적어주세요."></textarea>
+            </div>
+            <label class="booking-check" for="agree">
+              <input id="agree" name="agree" type="checkbox" required>
+              <span>개인정보 수집 및 예약 상담 진행에 동의합니다.</span>
+            </label>
+            <button class="booking-submit" id="submitButton" type="submit">신청하기</button>
+            <div class="booking-status" id="bookingStatus" hidden></div>
+          </form>
+        </div>
+        <aside class="booking-guide">
+          <h3>안내</h3>
+          <ul>
+            <li>신청 내용은 예약 확정이 아닌 접수 기준입니다.</li>
+            <li>희망 날짜와 차량 상황 확인 후 순차적으로 안내드립니다.</li>
+            <li>북부, 중부, 남부, 단독투어 모두 한국인 차량가이드가 동행하여 한국어로 설명합니다.</li>
+            <li>포함 사항은 전용 차량, 기사, 한국인 차량가이드 기준으로 운영됩니다.</li>
+          </ul>
+        </aside>
+      </section>
+    </main>
+  </div>
+  <script>
+    const TOUR_MAP = {
+      north: {
+        name: "북부 하루완성코스",
+        lead: "북부 대표 관광지를 기준으로 예약 접수를 진행합니다.",
+        image: "./tour-north-canva.png"
+      },
+      central: {
+        name: "중부 감성 드라이브",
+        lead: "중부 드라이브 코스를 기준으로 예약 접수를 진행합니다.",
+        image: "./central-drive-card.jpg"
+      },
+      south: {
+        name: "남부 힐링 루트",
+        lead: "남부 대표 포인트를 기준으로 예약 접수를 진행합니다.",
+        image: "./south-healing-card.jpg"
+      },
+      private: {
+        name: "단독투어",
+        lead: "고객 요청에 맞춘 프라이빗 단독투어 예약 접수를 진행합니다.",
+        image: "./custom-private-transfer-card.png"
+      }
+    };
+
+    const searchParams = new URLSearchParams(window.location.search);
+    const selectedTourKey = searchParams.get("tour") || "private";
+    const selectedTour = TOUR_MAP[selectedTourKey] || TOUR_MAP.private;
+
+    const titleEl = document.getElementById("bookingTitle");
+    const leadEl = document.getElementById("bookingLead");
+    const imageEl = document.getElementById("bookingImage");
+    const tourNameEl = document.getElementById("tourName");
+    const statusEl = document.getElementById("bookingStatus");
+    const submitButton = document.getElementById("submitButton");
+    const form = document.getElementById("tourBookingForm");
+
+    titleEl.textContent = selectedTour.name + " 신청하기";
+    leadEl.textContent = selectedTour.lead;
+    imageEl.src = selectedTour.image;
+    imageEl.alt = selectedTour.name + " 예약 이미지";
+    tourNameEl.value = selectedTour.name;
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (window.location.protocol === "file:") {
+        statusEl.hidden = false;
+        statusEl.classList.add("is-error");
+        statusEl.textContent = "로컬 파일로 열면 예약 접수가 되지 않습니다. Netlify 배포 주소 또는 로컬 서버에서 열어주세요.";
+        return;
+      }
+
+      const formData = new FormData(form);
+      const payload = {
+        inquiryType: "reservation",
+        serviceType: "tour",
+        title: selectedTour.name + " 신청",
+        preferredDate: String(formData.get("preferredDate") || ""),
+        name: String(formData.get("name") || "").trim(),
+        phone: String(formData.get("phone") || "").trim(),
+        email: String(formData.get("email") || "").trim(),
+        website: String(formData.get("website") || "").trim(),
+        agree: formData.get("agree") === "on",
+        message: [
+          "신청 투어: " + selectedTour.name,
+          "인원수: " + String(formData.get("partySize") || "").trim(),
+          "픽업 장소/숙소: " + String(formData.get("pickupPlace") || "").trim(),
+          "요청사항: " + String(formData.get("message") || "").trim()
+        ].join("\n")
+      };
+
+      submitButton.disabled = true;
+      submitButton.textContent = "접수 중...";
+      statusEl.hidden = true;
+      statusEl.classList.remove("is-error");
+
+      try {
+        const response = await fetch("/.netlify/functions/contact-inquiries", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.message || "예약 접수에 실패했습니다.");
+        }
+
+        form.reset();
+        tourNameEl.value = selectedTour.name;
+        statusEl.hidden = false;
+        statusEl.textContent = "접수가 완료되었습니다. 문의번호: " + result.inquiry.inquiryCode;
+      } catch (error) {
+        statusEl.hidden = false;
+        statusEl.classList.add("is-error");
+        statusEl.textContent = error.message || "예약 접수 중 오류가 발생했습니다.";
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "신청하기";
+      }
+    });
+  </script>
+</body>
+</html>

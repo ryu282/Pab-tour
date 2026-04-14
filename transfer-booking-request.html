@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="ko" data-lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>okioki rent a car | 픽/드랍 예약</title>
+  <meta name="description" content="공항과 골프장 이동을 위한 픽업/드롭 예약 페이지입니다.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Outfit:wght@400;500;600;700;800&family=SUIT:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    .booking-page { padding: 32px 32px 72px; display: grid; gap: 24px; }
+    .booking-panel, .booking-form-wrap, .booking-guide, .booking-summary-card { background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(165, 186, 213, 0.26); border-radius: 28px; box-shadow: 0 22px 48px rgba(15, 31, 54, 0.09); }
+    .booking-panel { padding: 30px; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 22px; align-items: center; }
+    .booking-copy { display: grid; gap: 14px; }
+    .booking-copy h1, .booking-form-wrap h2, .booking-guide h3, .booking-summary-card h3 { margin: 0; color: #163255; letter-spacing: -0.04em; }
+    .booking-copy p, .booking-guide li, .booking-form-note, .booking-status, .booking-summary-card p, .booking-summary-card li { margin: 0; color: #58708e; line-height: 1.78; }
+    .booking-badge { display: inline-flex; width: fit-content; min-height: 36px; align-items: center; padding: 0 14px; border-radius: 999px; background: #1f76ff; color: #fff; font-weight: 800; }
+    .booking-visual { overflow: hidden; border-radius: 24px; min-height: 320px; border: 1px solid rgba(179, 198, 226, 0.4); background: linear-gradient(135deg, #eaf3ff, #f8fbff); }
+    .booking-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .booking-layout { display: grid; grid-template-columns: 1.12fr 0.88fr; gap: 24px; }
+    .booking-form-wrap { padding: 28px; display: grid; gap: 18px; }
+    .booking-form { display: grid; gap: 16px; }
+    .booking-field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .booking-field { display: grid; gap: 8px; }
+    .booking-field label { font-weight: 700; color: #163255; }
+    .booking-field input, .booking-field select, .booking-field textarea { width: 100%; min-height: 50px; padding: 12px 14px; border-radius: 16px; border: 1px solid rgba(154, 180, 214, 0.55); background: #f9fbff; color: #163255; font: inherit; }
+    .booking-field textarea { min-height: 132px; resize: vertical; }
+    .booking-field input[readonly] { background: #eef4ff; font-weight: 700; }
+    .booking-layout-side { display: grid; gap: 18px; align-content: start; }
+    .booking-guide, .booking-summary-card { padding: 24px; display: grid; gap: 14px; align-content: start; }
+    .booking-guide ul, .booking-summary-card ul { margin: 0; padding-left: 20px; color: #38516f; line-height: 1.7; }
+    .booking-check { display: flex; align-items: flex-start; gap: 10px; color: #38516f; }
+    .booking-check input { margin-top: 4px; }
+    .booking-submit { display: inline-flex; align-items: center; justify-content: center; min-height: 54px; padding: 0 24px; border: 0; border-radius: 999px; background: linear-gradient(135deg, #1f76ff, #0f5ed8); color: #fff; font-weight: 800; cursor: pointer; box-shadow: 0 16px 30px rgba(31, 118, 255, 0.24); }
+    .booking-submit:disabled { opacity: 0.6; cursor: wait; }
+    .booking-status { padding: 14px 16px; border-radius: 18px; background: #eef5ff; border: 1px solid rgba(171, 194, 222, 0.45); }
+    .booking-status.is-error { background: #fff1ef; border-color: rgba(216, 82, 67, 0.28); color: #a4473b; }
+    .booking-summary-card { background: linear-gradient(180deg, rgba(240, 247, 255, 0.98), rgba(232, 242, 255, 0.95)); }
+    .booking-total-box { display: grid; gap: 8px; padding: 18px; border-radius: 22px; background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(165, 186, 213, 0.32); }
+    .booking-total-box strong { color: #163255; font-size: 1.6rem; letter-spacing: -0.03em; }
+    .booking-helper { font-size: 0.94rem; color: #6d7f96; }
+    .hidden-field { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }
+    @media (max-width: 960px) {
+      .booking-page { padding: 18px 18px 56px; }
+      .booking-panel, .booking-layout, .booking-field-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-bg" id="pageBg"></div>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="./index.html">
+        <img class="brand-logo" src="./okioki.png.png" alt="okioki rent a car logo">
+        <span>
+          <strong>okioki rent a car</strong>
+          <small data-i18n="brandSub">Transfer Booking</small>
+        </span>
+      </a>
+      <div class="topbar-tools">
+        <nav class="nav" data-i18n-aria-label="navAriaLabel">
+          <a href="./index.html" data-i18n="navHome">홈</a>
+          <a href="./tour-custom.html" data-i18n="navTransfer">픽/드랍 상세</a>
+          <a href="./tour.html" data-i18n="navTour">투어상품</a>
+        </nav>
+        <div class="lang-switcher" role="group" aria-label="언어 선택">
+          <button class="lang-switcher__button is-active" type="button" data-lang-button="kr" aria-pressed="true">KR</button>
+          <button class="lang-switcher__button" type="button" data-lang-button="jp" aria-pressed="false">JP</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="booking-page">
+      <section class="booking-panel">
+        <div class="booking-copy">
+          <span class="booking-badge" data-i18n="pageBadge">픽/드랍 예약</span>
+          <h1 data-i18n="heroTitle">지역별 픽/드랍 예약 접수</h1>
+          <p data-i18n="heroBody1">공항/골프장 이동을 위해 지역, 차량, 편도/왕복을 선택하면 예상 합계금액을 바로 확인할 수 있습니다.</p>
+          <p data-i18n="heroBody2">표시 금액은 편도 기준이며, 왕복은 동일 지역 기준으로 2배 자동 계산됩니다.</p>
+        </div>
+        <div class="booking-visual">
+          <img src="./pickup-drop-detail-hero.png" data-i18n-alt="heroImageAlt" alt="픽업 드롭 예약 대표 이미지">
+        </div>
+      </section>
+
+      <section class="booking-layout">
+        <div class="booking-form-wrap">
+          <h2 data-i18n="formTitle">예약 정보 입력</h2>
+          <p class="booking-form-note" data-i18n="formNote">왕복이 서로 다른 지역이거나 심야 이동, 경유가 있는 경우 요청사항에 남겨주시면 별도 안내드립니다.</p>
+          <form class="booking-form" id="transferBookingForm">
+            <input class="hidden-field" type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+            <div class="booking-field-grid">
+              <div class="booking-field">
+                <label for="serviceCategory" data-i18n="labelServiceCategory">서비스 유형</label>
+                <select id="serviceCategory" name="serviceCategory" required></select>
+              </div>
+              <div class="booking-field">
+                <label for="tripType" data-i18n="labelTripType">이용 구간</label>
+                <select id="tripType" name="tripType" required></select>
+              </div>
+            </div>
+            <div class="booking-field-grid">
+              <div class="booking-field">
+                <label for="vehicleType" data-i18n="labelVehicleType">차량 선택</label>
+                <select id="vehicleType" name="vehicleType" required></select>
+              </div>
+              <div class="booking-field">
+                <label for="region" data-i18n="labelRegion">이동 지역</label>
+                <select id="region" name="region" required></select>
+              </div>
+            </div>
+            <div class="booking-field-grid">
+              <div class="booking-field">
+                <label for="baseFare" data-i18n="labelBaseFare">편도 기준 요금</label>
+                <input id="baseFare" name="baseFare" type="text" readonly>
+              </div>
+              <div class="booking-field">
+                <label for="totalFare" data-i18n="labelTotalFare">예상 합계금액</label>
+                <input id="totalFare" name="totalFare" type="text" readonly>
+              </div>
+            </div>
+            <div class="booking-field">
+              <label for="regionDetail" data-i18n="labelRegionDetail">지역 안내</label>
+              <input id="regionDetail" name="regionDetail" type="text" readonly>
+            </div>
+            <div class="booking-field-grid">
+              <div class="booking-field">
+                <label for="detailZone" data-i18n="labelDetailZone">상세 구간</label>
+                <select id="detailZone" name="detailZone" required></select>
+              </div>
+              <div class="booking-field">
+                <label for="routeHint" data-i18n="labelRouteHint">구간 예시</label>
+                <input id="routeHint" name="routeHint" type="text" readonly>
+              </div>
+            </div>
+            <div class="booking-field-grid">
+              <div class="booking-field">
+                <label for="preferredDate" data-i18n="labelPreferredDate">희망 날짜</label>
+                <input id="preferredDate" name="preferredDate" type="date" required>
+              </div>
+              <div class="booking-field">
+                <label for="preferredTime" data-i18n="labelPreferredTime">희망 시간</label>
+                <input id="preferredTime" name="preferredTime" type="time">
+              </div>
+            </div>
+            <div class="booking-field-grid">
+              <div class="booking-field">
+                <label for="name" data-i18n="labelName">예약자명</label>
+                <input id="name" name="name" type="text" required maxlength="50" data-i18n-placeholder="placeholderName">
+              </div>
+              <div class="booking-field">
+                <label for="partySize" data-i18n="labelPartySize">탑승 인원</label>
+                <select id="partySize" name="partySize" required></select>
+              </div>
+            </div>
+            <div class="booking-field-grid">
+              <div class="booking-field">
+                <label for="phone" data-i18n="labelPhone">연락처</label>
+                <input id="phone" name="phone" type="tel" required placeholder="010-0000-0000">
+              </div>
+              <div class="booking-field">
+                <label for="email" data-i18n="labelEmail">이메일</label>
+                <input id="email" name="email" type="email" required placeholder="you@example.com">
+              </div>
+            </div>
+            <div class="booking-field-grid">
+              <div class="booking-field">
+                <label for="pickupPlace" data-i18n="labelPickupPlace">출발 장소</label>
+                <input id="pickupPlace" name="pickupPlace" type="text" required data-i18n-placeholder="placeholderPickup">
+              </div>
+              <div class="booking-field">
+                <label for="dropoffPlace" data-i18n="labelDropoffPlace">도착 장소</label>
+                <input id="dropoffPlace" name="dropoffPlace" type="text" required data-i18n-placeholder="placeholderDropoff">
+              </div>
+            </div>
+            <div class="booking-field">
+              <label for="flightInfo" data-i18n="labelFlightInfo">항공편 / 티오프 정보</label>
+              <input id="flightInfo" name="flightInfo" type="text" data-i18n-placeholder="placeholderFlightInfo">
+            </div>
+            <div class="booking-field">
+              <label for="message" data-i18n="labelMessage">요청사항</label>
+              <textarea id="message" name="message" data-i18n-placeholder="placeholderMessage"></textarea>
+            </div>
+            <label class="booking-check" for="agree">
+              <input id="agree" name="agree" type="checkbox" required>
+              <span data-i18n="agreeText">예약 확인을 위해 입력한 연락처로 운영팀이 안내드리는 것에 동의합니다.</span>
+            </label>
+            <button class="booking-submit" id="submitButton" type="submit" data-i18n="submitIdle">예약 신청하기</button>
+            <div class="booking-status" id="bookingStatus" hidden></div>
+          </form>
+        </div>
+
+        <aside class="booking-layout-side">
+          <section class="booking-summary-card">
+            <h3 data-i18n="summaryTitle">예상 금액 요약</h3>
+            <div class="booking-total-box">
+              <p id="summaryLabel"></p>
+              <strong id="summaryTotal"></strong>
+              <p class="booking-helper" id="summaryMeta"></p>
+            </div>
+            <ul id="summaryList"></ul>
+          </section>
+          <section class="booking-guide">
+            <h3 data-i18n="guideTitle">지역 구분 안내</h3>
+            <ul id="regionGuideList"></ul>
+          </section>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const LANGUAGE_STORAGE_KEY = "rentcarPublicLanguageV1";
+
+    const TEXT = {
+      kr: {
+        pageTitle: "okioki rent a car | 픽/드랍 예약",
+        metaDescription: "공항과 골프장 이동을 위한 픽업/드롭 예약 페이지입니다.",
+        brandSub: "Transfer Booking",
+        navAriaLabel: "주요 메뉴",
+        navHome: "홈",
+        navTransfer: "픽/드랍 상세",
+        navTour: "투어상품",
+        pageBadge: "픽/드랍 예약",
+        heroTitle: "지역별 픽/드랍 예약 접수",
+        heroBody1: "공항/골프장 이동을 위해 지역, 차량, 편도/왕복을 선택하면 예상 합계금액을 바로 확인할 수 있습니다.",
+        heroBody2: "표시 금액은 편도 기준이며, 왕복은 동일 지역 기준으로 2배 자동 계산됩니다.",
+        heroImageAlt: "픽업 드롭 예약 대표 이미지",
+        formTitle: "예약 정보 입력",
+        formNote: "왕복이 서로 다른 지역이거나 심야 이동, 경유가 있는 경우 요청사항에 남겨주시면 별도 안내드립니다.",
+        labelServiceCategory: "서비스 유형",
+        labelTripType: "이용 구간",
+        labelVehicleType: "차량 선택",
+        labelRegion: "이동 지역",
+        labelBaseFare: "편도 기준 요금",
+        labelTotalFare: "예상 합계금액",
+        labelRegionDetail: "지역 안내",
+        labelDetailZone: "상세 구간",
+        labelRouteHint: "구간 예시",
+        labelPreferredDate: "희망 날짜",
+        labelPreferredTime: "희망 시간",
+        labelName: "예약자명",
+        labelPartySize: "탑승 인원",
+        labelPhone: "연락처",
+        labelEmail: "이메일",
+        labelPickupPlace: "출발 장소",
+        labelDropoffPlace: "도착 장소",
+        labelFlightInfo: "항공편 / 티오프 정보",
+        labelMessage: "요청사항",
+        placeholderName: "성함을 입력해주세요",
+        placeholderPickup: "예: 나하공항 / 호텔명 / 골프장명",
+        placeholderDropoff: "예: 호텔명 / 골프장명 / 나하공항",
+        placeholderFlightInfo: "예: KE735 / 13:30 티오프",
+        placeholderMessage: "왕복 다른 지역, 경유지, 캐리어/골프백 수량, 심야 이동 등 상세 요청을 남겨주세요.",
+        agreeText: "예약 확인을 위해 입력한 연락처로 운영팀이 안내드리는 것에 동의합니다.",
+        submitIdle: "예약 신청하기",
+        submitLoading: "접수 중입니다...",
+        summaryTitle: "예상 금액 요약",
+        summaryMetaOneWay: "편도 기준 금액입니다.",
+        summaryMetaRoundTrip: "왕복은 동일 지역 기준으로 2배 계산됩니다.",
+        summaryBullet1: "표시 금액은 기본 이동 기준입니다.",
+        summaryBullet2: "심야, 경유, 대기 시간은 별도 요금이 추가될 수 있습니다.",
+        summaryBullet3: "최종 금액은 접수 확인 후 운영팀이 다시 안내드립니다.",
+        guideTitle: "지역 구분 안내",
+        detailPlaceholder: "상세 구간을 선택해주세요",
+        partyPlaceholder: "탑승 인원을 선택해주세요",
+        routeCustomHint: "선택한 구간 기준 안내입니다.",
+        statusFile: "파일로 직접 열면 예약 전송이 되지 않습니다. 배포 주소 또는 로컬 서버에서 열어주세요.",
+        statusSuccess: "예약 접수가 완료되었습니다. 문의번호: ",
+        statusError: "예약 접수 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
+        statusValidation: "필수 정보를 모두 입력해주세요.",
+        inquiryPrefix: "[픽/드랍 예약]",
+        serviceCategories: {
+          airportPickup: "공항 픽업",
+          airportDrop: "공항 드롭",
+          golfPickup: "골프장 픽업",
+          golfDrop: "골프장 드롭",
+          airportGolfLink: "공항+골프장 연계",
+          customTransfer: "맞춤 픽/드랍"
+        },
+        tripTypes: {
+          oneWay: "편도",
+          roundTrip: "왕복"
+        },
+        vehicleTypes: {
+          alphard: "알파드 (7인승)",
+          hiace: "하이에이스 (10인승)"
+        },
+        partySizes: [
+          { value: "1-2명", label: "1-2명" },
+          { value: "3-4명", label: "3-4명" },
+          { value: "5-6명", label: "5-6명" },
+          { value: "7-10명", label: "7-10명" }
+        ]
+      },
+      jp: {
+        pageTitle: "okioki rent a car | 送迎予約",
+        metaDescription: "空港とゴルフ場移動のためのピックアップ・ドロップ予約ページです。",
+        brandSub: "Transfer Booking",
+        navAriaLabel: "メインメニュー",
+        navHome: "ホーム",
+        navTransfer: "送迎詳細",
+        navTour: "ツアー商品",
+        pageBadge: "送迎予約",
+        heroTitle: "エリア別 送迎予約受付",
+        heroBody1: "空港 / ゴルフ場移動のために、地域、車種、片道 / 往復を選ぶと予想合計金額をすぐに確認できます。",
+        heroBody2: "表示金額は片道基準で、往復は同一地域基準で2倍自動計算されます。",
+        heroImageAlt: "送迎予約のメインイメージ",
+        formTitle: "予約情報入力",
+        formNote: "往復で地域が異なる場合や深夜移動、経由地がある場合はご要望欄にご記入ください。別途ご案内いたします。",
+        labelServiceCategory: "サービス種別",
+        labelTripType: "利用区分",
+        labelVehicleType: "車種選択",
+        labelRegion: "移動エリア",
+        labelBaseFare: "片道基準料金",
+        labelTotalFare: "予想合計金額",
+        labelRegionDetail: "エリア案内",
+        labelDetailZone: "詳細区間",
+        labelRouteHint: "区間例",
+        labelPreferredDate: "希望日",
+        labelPreferredTime: "希望時間",
+        labelName: "予約者名",
+        labelPartySize: "人数",
+        labelPhone: "電話番号",
+        labelEmail: "メール",
+        labelPickupPlace: "出発場所",
+        labelDropoffPlace: "到着場所",
+        labelFlightInfo: "便名 / ティーオフ情報",
+        labelMessage: "ご要望",
+        placeholderName: "お名前をご入力ください",
+        placeholderPickup: "例: 那覇空港 / ホテル名 / ゴルフ場名",
+        placeholderDropoff: "例: ホテル名 / ゴルフ場名 / 那覇空港",
+        placeholderFlightInfo: "例: KE735 / 13:30 ティーオフ",
+        placeholderMessage: "別地域の往復、経由地、キャリーケース / ゴルフバッグ数、深夜移動など詳細をご入力ください。",
+        agreeText: "予約確認のため、ご入力いただいた連絡先へ運営チームがご案内することに同意します。",
+        submitIdle: "予約申し込み",
+        submitLoading: "送信中です...",
+        summaryTitle: "予想料金まとめ",
+        summaryMetaOneWay: "片道基準料金です。",
+        summaryMetaRoundTrip: "往復は同一地域基準で2倍計算されます。",
+        summaryBullet1: "表示金額は基本移動基準です。",
+        summaryBullet2: "深夜、経由、待機時間は追加料金が発生する場合があります。",
+        summaryBullet3: "最終金額は受付確認後に運営チームより再案内します。",
+        guideTitle: "エリア区分案内",
+        detailPlaceholder: "詳細区間を選択してください",
+        partyPlaceholder: "人数を選択してください",
+        routeCustomHint: "選択した区間基準のご案内です。",
+        statusFile: "file:// で直接開くと予約送信ができません。配布URLまたはローカルサーバーで開いてください。",
+        statusSuccess: "予約受付が完了しました。お問い合わせ番号: ",
+        statusError: "予約送信中に問題が発生しました。しばらくしてからもう一度お試しください。",
+        statusValidation: "必須情報をすべて入力してください。",
+        inquiryPrefix: "[送迎予約]",
+        serviceCategories: {
+          airportPickup: "空港ピックアップ",
+          airportDrop: "空港ドロップ",
+          golfPickup: "ゴルフ場ピックアップ",
+          golfDrop: "ゴルフ場ドロップ",
+          airportGolfLink: "空港+ゴルフ場連携",
+          customTransfer: "カスタム送迎"
+        },
+        tripTypes: {
+          oneWay: "片道",
+          roundTrip: "往復"
+        },
+        vehicleTypes: {
+          alphard: "アルファード (7人乗り)",
+          hiace: "ハイエース (10人乗り)"
+        },
+        partySizes: [
+          { value: "1-2명", label: "1-2名" },
+          { value: "3-4명", label: "3-4名" },
+          { value: "5-6명", label: "5-6名" },
+          { value: "7-10명", label: "7-10名" }
+        ]
+      }
+    };
+
+    const REGION_DATA = {
+      nahaCity: { kr: "나하시내", jp: "那覇市内", detailKr: "나하시내, 국제거리, 도마리, 아사토 일대", detailJp: "那覇市内、国際通り、泊、安里周辺", alphard: 9000, hiace: 11000 },
+      southArea: { kr: "남부주변", jp: "南部周辺", detailKr: "토미시로, 이토만, 난조시", detailJp: "豊見城、糸満、南城市", alphard: 12000, hiace: 15000 },
+      centralArea: { kr: "중부", jp: "中部", detailKr: "우라소에, 기노완, 오키나와시, 나카구스쿠", detailJp: "浦添、宜野湾、沖縄市、中城", alphard: 14000, hiace: 16000 },
+      onnaSouth: { kr: "중부(온나손남부)", jp: "中部(恩納村南部)", detailKr: "우루마시, 요미탄, 온나손 남부", detailJp: "うるま市、読谷、恩納村南部", alphard: 20000, hiace: 23000 },
+      onnaNorth: { kr: "중부(온나손북부)", jp: "中部(恩納村北部)", detailKr: "온나손 북부, 기노자, 만좌모, 긴초", detailJp: "恩納村北部、宜野座、万座毛、金武町", alphard: 25000, hiace: 28000 },
+      nagoArea: { kr: "나고", jp: "名護", detailKr: "부세나리조트, 나고 시내", detailJp: "ブセナリゾート、名護市内", alphard: 30000, hiace: 32000 },
+      northArea: { kr: "북부", jp: "北部", detailKr: "모토부, 나키진, 구니가미군", detailJp: "本部、今帰仁、国頭郡", alphard: 32000, hiace: 34000 }
+    };
+
+    const DETAIL_OPTIONS = {
+      airportPickup: [
+        { id: "airport-to-naha", region: "nahaCity", kr: "나하공항 → 나하시내", jp: "那覇空港 → 那覇市内", hintKr: "나하공항에서 나하시내 호텔 또는 국제거리 이동", hintJp: "那覇空港から那覇市内ホテルまたは国際通りへ", pickupKr: "나하공항", pickupJp: "那覇空港", dropoffKr: "나하시내 호텔 / 국제거리", dropoffJp: "那覇市内ホテル / 国際通り" },
+        { id: "airport-to-south", region: "southArea", kr: "나하공항 → 남부주변", jp: "那覇空港 → 南部周辺", hintKr: "나하공항에서 토미시로, 이토만, 난조시 방향 이동", hintJp: "那覇空港から豊見城、糸満、南城市方面へ", pickupKr: "나하공항", pickupJp: "那覇空港", dropoffKr: "남부 지역 호텔 / 목적지", dropoffJp: "南部エリアのホテル / 目的地" },
+        { id: "airport-to-central", region: "centralArea", kr: "나하공항 → 중부", jp: "那覇空港 → 中部", hintKr: "나하공항에서 우라소에, 기노완, 오키나와시 이동", hintJp: "那覇空港から浦添、宜野湾、沖縄市方面へ", pickupKr: "나하공항", pickupJp: "那覇空港", dropoffKr: "중부 호텔 / 목적지", dropoffJp: "中部ホテル / 目的地" },
+        { id: "airport-to-onna-south", region: "onnaSouth", kr: "나하공항 → 온나손 남부", jp: "那覇空港 → 恩納村南部", hintKr: "나하공항에서 우루마시, 요미탄, 온나손 남부 이동", hintJp: "那覇空港からうるま市、読谷、恩納村南部へ", pickupKr: "나하공항", pickupJp: "那覇空港", dropoffKr: "온나손 남부 호텔 / 리조트", dropoffJp: "恩納村南部ホテル / リゾート" },
+        { id: "airport-to-onna-north", region: "onnaNorth", kr: "나하공항 → 온나손 북부", jp: "那覇空港 → 恩納村北部", hintKr: "나하공항에서 온나손 북부, 기노자, 만좌모 방향 이동", hintJp: "那覇空港から恩納村北部、宜野座、万座毛方面へ", pickupKr: "나하공항", pickupJp: "那覇空港", dropoffKr: "온나손 북부 호텔 / 리조트", dropoffJp: "恩納村北部ホテル / リゾート" },
+        { id: "airport-to-nago", region: "nagoArea", kr: "나하공항 → 나고", jp: "那覇空港 → 名護", hintKr: "나하공항에서 나고 시내 또는 부세나 리조트 이동", hintJp: "那覇空港から名護市内またはブセナリゾートへ", pickupKr: "나하공항", pickupJp: "那覇空港", dropoffKr: "나고 호텔 / 리조트", dropoffJp: "名護ホテル / リゾート" },
+        { id: "airport-to-north", region: "northArea", kr: "나하공항 → 북부", jp: "那覇空港 → 北部", hintKr: "나하공항에서 모토부, 나키진, 북부 리조트 이동", hintJp: "那覇空港から本部、今帰仁、北部リゾートへ", pickupKr: "나하공항", pickupJp: "那覇空港", dropoffKr: "북부 호텔 / 목적지", dropoffJp: "北部ホテル / 目的地" }
+      ],
+      airportDrop: [
+        { id: "naha-to-airport", region: "nahaCity", kr: "나하시내 → 나하공항", jp: "那覇市内 → 那覇空港", hintKr: "나하시내 호텔 또는 국제거리에서 나하공항 이동", hintJp: "那覇市内ホテルまたは国際通りから那覇空港へ", pickupKr: "나하시내 호텔 / 국제거리", pickupJp: "那覇市内ホテル / 国際通り", dropoffKr: "나하공항", dropoffJp: "那覇空港" },
+        { id: "south-to-airport", region: "southArea", kr: "남부주변 → 나하공항", jp: "南部周辺 → 那覇空港", hintKr: "남부 지역 호텔 또는 목적지에서 나하공항 이동", hintJp: "南部エリアのホテルまたは目的地から那覇空港へ", pickupKr: "남부 지역 호텔 / 목적지", pickupJp: "南部エリアのホテル / 目的地", dropoffKr: "나하공항", dropoffJp: "那覇空港" },
+        { id: "central-to-airport", region: "centralArea", kr: "중부 → 나하공항", jp: "中部 → 那覇空港", hintKr: "중부 호텔 또는 목적지에서 나하공항 이동", hintJp: "中部ホテルまたは目的地から那覇空港へ", pickupKr: "중부 호텔 / 목적지", pickupJp: "中部ホテル / 目的地", dropoffKr: "나하공항", dropoffJp: "那覇空港" },
+        { id: "onna-south-to-airport", region: "onnaSouth", kr: "온나손 남부 → 나하공항", jp: "恩納村南部 → 那覇空港", hintKr: "온나손 남부 리조트에서 나하공항 이동", hintJp: "恩納村南部リゾートから那覇空港へ", pickupKr: "온나손 남부 호텔 / 리조트", pickupJp: "恩納村南部ホテル / リゾート", dropoffKr: "나하공항", dropoffJp: "那覇空港" },
+        { id: "onna-north-to-airport", region: "onnaNorth", kr: "온나손 북부 → 나하공항", jp: "恩納村北部 → 那覇空港", hintKr: "온나손 북부 리조트에서 나하공항 이동", hintJp: "恩納村北部リゾートから那覇空港へ", pickupKr: "온나손 북부 호텔 / 리조트", pickupJp: "恩納村北部ホテル / リゾート", dropoffKr: "나하공항", dropoffJp: "那覇空港" },
+        { id: "nago-to-airport", region: "nagoArea", kr: "나고 → 나하공항", jp: "名護 → 那覇空港", hintKr: "나고 시내 또는 부세나 리조트에서 나하공항 이동", hintJp: "名護市内またはブセナリゾートから那覇空港へ", pickupKr: "나고 호텔 / 리조트", pickupJp: "名護ホテル / リゾート", dropoffKr: "나하공항", dropoffJp: "那覇空港" },
+        { id: "north-to-airport", region: "northArea", kr: "북부 → 나하공항", jp: "北部 → 那覇空港", hintKr: "모토부, 나키진, 북부 리조트에서 나하공항 이동", hintJp: "本部、今帰仁、北部リゾートから那覇空港へ", pickupKr: "북부 호텔 / 목적지", pickupJp: "北部ホテル / 目的地", dropoffKr: "나하공항", dropoffJp: "那覇空港" }
+      ],
+      golfPickup: [
+        { id: "naha-hotel-to-south-golf", region: "southArea", kr: "나하시내 숙소 → 남부 골프장", jp: "那覇市内宿泊先 → 南部ゴルフ場", hintKr: "나하시내 숙소에서 남부권 골프장 이동", hintJp: "那覇市内宿泊先から南部エリアのゴルフ場へ", pickupKr: "나하시내 숙소", pickupJp: "那覇市内宿泊先", dropoffKr: "남부 골프장", dropoffJp: "南部ゴルフ場" },
+        { id: "naha-hotel-to-central-golf", region: "centralArea", kr: "나하시내 숙소 → 중부 골프장", jp: "那覇市内宿泊先 → 中部ゴルフ場", hintKr: "나하시내 숙소에서 중부권 골프장 이동", hintJp: "那覇市内宿泊先から中部エリアのゴルフ場へ", pickupKr: "나하시내 숙소", pickupJp: "那覇市内宿泊先", dropoffKr: "중부 골프장", dropoffJp: "中部ゴルフ場" },
+        { id: "central-hotel-to-onna-golf", region: "onnaSouth", kr: "중부 숙소 → 온나손 남부 골프장", jp: "中部宿泊先 → 恩納村南部ゴルフ場", hintKr: "중부 숙소에서 온나손 남부 골프장 이동", hintJp: "中部宿泊先から恩納村南部ゴルフ場へ", pickupKr: "중부 숙소", pickupJp: "中部宿泊先", dropoffKr: "온나손 남부 골프장", dropoffJp: "恩納村南部ゴルフ場" },
+        { id: "onna-hotel-to-north-golf", region: "onnaNorth", kr: "온나손 숙소 → 온나손 북부 골프장", jp: "恩納村宿泊先 → 恩納村北部ゴルフ場", hintKr: "온나손 숙소에서 북부권 골프장 이동", hintJp: "恩納村宿泊先から北部エリアのゴルフ場へ", pickupKr: "온나손 숙소", pickupJp: "恩納村宿泊先", dropoffKr: "북부권 골프장", dropoffJp: "北部エリアのゴルフ場" },
+        { id: "nago-hotel-to-north-golf", region: "nagoArea", kr: "나고 숙소 → 나고/북부 골프장", jp: "名護宿泊先 → 名護 / 北部ゴルフ場", hintKr: "나고 숙소에서 나고 또는 북부 골프장 이동", hintJp: "名護宿泊先から名護または北部ゴルフ場へ", pickupKr: "나고 숙소", pickupJp: "名護宿泊先", dropoffKr: "나고 / 북부 골프장", dropoffJp: "名護 / 北部ゴルフ場" }
+      ],
+      golfDrop: [
+        { id: "south-golf-to-naha-hotel", region: "southArea", kr: "남부 골프장 → 나하시내 숙소", jp: "南部ゴルフ場 → 那覇市内宿泊先", hintKr: "남부 골프장에서 나하시내 숙소 복귀", hintJp: "南部ゴルフ場から那覇市内宿泊先へ", pickupKr: "남부 골프장", pickupJp: "南部ゴルフ場", dropoffKr: "나하시내 숙소", dropoffJp: "那覇市内宿泊先" },
+        { id: "central-golf-to-naha-hotel", region: "centralArea", kr: "중부 골프장 → 나하시내 숙소", jp: "中部ゴルフ場 → 那覇市内宿泊先", hintKr: "중부 골프장에서 나하시내 숙소 복귀", hintJp: "中部ゴルフ場から那覇市内宿泊先へ", pickupKr: "중부 골프장", pickupJp: "中部ゴルフ場", dropoffKr: "나하시내 숙소", dropoffJp: "那覇市内宿泊先" },
+        { id: "onna-golf-to-central-hotel", region: "onnaSouth", kr: "온나손 남부 골프장 → 중부 숙소", jp: "恩納村南部ゴルフ場 → 中部宿泊先", hintKr: "온나손 남부 골프장에서 중부 숙소 복귀", hintJp: "恩納村南部ゴルフ場から中部宿泊先へ", pickupKr: "온나손 남부 골프장", pickupJp: "恩納村南部ゴルフ場", dropoffKr: "중부 숙소", dropoffJp: "中部宿泊先" },
+        { id: "north-golf-to-onna-hotel", region: "onnaNorth", kr: "북부 골프장 → 온나손 숙소", jp: "北部ゴルフ場 → 恩納村宿泊先", hintKr: "북부 골프장에서 온나손 숙소 복귀", hintJp: "北部ゴルフ場から恩納村宿泊先へ", pickupKr: "북부 골프장", pickupJp: "北部ゴルフ場", dropoffKr: "온나손 숙소", dropoffJp: "恩納村宿泊先" },
+        { id: "north-golf-to-nago-hotel", region: "nagoArea", kr: "나고/북부 골프장 → 나고 숙소", jp: "名護 / 北部ゴルフ場 → 名護宿泊先", hintKr: "나고 또는 북부 골프장에서 나고 숙소 복귀", hintJp: "名護または北部ゴルフ場から名護宿泊先へ", pickupKr: "나고 / 북부 골프장", pickupJp: "名護 / 北部ゴルフ場", dropoffKr: "나고 숙소", dropoffJp: "名護宿泊先" }
+      ],
+      airportGolfLink: [
+        { id: "airport-to-south-golf", region: "southArea", kr: "나하공항 → 남부 골프장", jp: "那覇空港 → 南部ゴルフ場", hintKr: "공항 도착 후 바로 남부 골프장 이동", hintJp: "空港到着後そのまま南部ゴルフ場へ", pickupKr: "나하공항", pickupJp: "那覇空港", dropoffKr: "남부 골프장", dropoffJp: "南部ゴルフ場" },
+        { id: "airport-to-central-golf", region: "centralArea", kr: "나하공항 → 중부 골프장", jp: "那覇空港 → 中部ゴルフ場", hintKr: "공항 도착 후 바로 중부 골프장 이동", hintJp: "空港到着後そのまま中部ゴルフ場へ", pickupKr: "나하공항", pickupJp: "那覇空港", dropoffKr: "중부 골프장", dropoffJp: "中部ゴルフ場" },
+        { id: "airport-to-onna-golf", region: "onnaSouth", kr: "나하공항 → 온나손 남부 골프장", jp: "那覇空港 → 恩納村南部ゴルフ場", hintKr: "공항 도착 후 온나손 남부 골프장 이동", hintJp: "空港到着後に恩納村南部ゴルフ場へ", pickupKr: "나하공항", pickupJp: "那覇空港", dropoffKr: "온나손 남부 골프장", dropoffJp: "恩納村南部ゴルフ場" },
+        { id: "golf-to-airport", region: "centralArea", kr: "골프장 종료 후 → 나하공항", jp: "ラウンド後 → 那覇空港", hintKr: "라운딩 종료 후 공항으로 바로 이동", hintJp: "ラウンド終了後そのまま空港へ", pickupKr: "골프장", pickupJp: "ゴルフ場", dropoffKr: "나하공항", dropoffJp: "那覇空港" },
+        { id: "hotel-golf-airport", region: "centralArea", kr: "숙소 → 골프장 → 공항", jp: "宿泊先 → ゴルフ場 → 空港", hintKr: "숙소 출발 후 골프장 라운딩, 이후 공항 이동", hintJp: "宿泊先出発後ゴルフ場でラウンド、その後空港へ", pickupKr: "숙소", pickupJp: "宿泊先", dropoffKr: "공항 연계 일정", dropoffJp: "空港連携日程" }
+      ],
+      customTransfer: [
+        { id: "custom-naha-south", region: "southArea", kr: "나하시내 ↔ 남부주변", jp: "那覇市内 ↔ 南部周辺", hintKr: "나하시내와 남부권 이동 상담용", hintJp: "那覇市内と南部エリア移動の相談用", pickupKr: "직접 입력", pickupJp: "直接入力", dropoffKr: "직접 입력", dropoffJp: "直接入力" },
+        { id: "custom-naha-central", region: "centralArea", kr: "나하시내 ↔ 중부", jp: "那覇市内 ↔ 中部", hintKr: "나하시내와 중부권 이동 상담용", hintJp: "那覇市内と中部エリア移動の相談用", pickupKr: "직접 입력", pickupJp: "直接入力", dropoffKr: "직접 입력", dropoffJp: "直接入力" },
+        { id: "custom-central-onna", region: "onnaSouth", kr: "중부 ↔ 온나손", jp: "中部 ↔ 恩納村", hintKr: "중부와 온나손 이동 상담용", hintJp: "中部と恩納村の移動相談用", pickupKr: "직접 입력", pickupJp: "直接入力", dropoffKr: "직접 입력", dropoffJp: "直接入力" },
+        { id: "custom-nago-north", region: "northArea", kr: "나고 ↔ 북부", jp: "名護 ↔ 北部", hintKr: "나고와 북부권 이동 상담용", hintJp: "名護と北部エリア移動の相談用", pickupKr: "직접 입력", pickupJp: "直接入力", dropoffKr: "직접 입력", dropoffJp: "直接入力" },
+        { id: "custom-direct", region: "nahaCity", kr: "직접 구간 입력 상담", jp: "直接区間入力相談", hintKr: "출발지와 도착지를 직접 입력해 상담 가능합니다.", hintJp: "出発地と到着地を直接入力して相談できます。", pickupKr: "직접 입력", pickupJp: "直接入力", dropoffKr: "직접 입력", dropoffJp: "直接入力" }
+      ]
+    };
+
+    const SERVICE_CATEGORY_ORDER = ["airportPickup", "airportDrop", "golfPickup", "golfDrop", "airportGolfLink", "customTransfer"];
+    const VEHICLE_ORDER = ["alphard", "hiace"];
+    const TRIP_ORDER = ["oneWay", "roundTrip"];
+
+    const descriptionMeta = document.querySelector('meta[name="description"]');
+    const langButtons = Array.from(document.querySelectorAll("[data-lang-button]"));
+    const form = document.getElementById("transferBookingForm");
+    const serviceCategory = document.getElementById("serviceCategory");
+    const tripType = document.getElementById("tripType");
+    const vehicleType = document.getElementById("vehicleType");
+    const region = document.getElementById("region");
+    const baseFare = document.getElementById("baseFare");
+    const totalFare = document.getElementById("totalFare");
+    const regionDetail = document.getElementById("regionDetail");
+    const detailZone = document.getElementById("detailZone");
+    const routeHint = document.getElementById("routeHint");
+    const pickupPlace = document.getElementById("pickupPlace");
+    const dropoffPlace = document.getElementById("dropoffPlace");
+    const submitButton = document.getElementById("submitButton");
+    const bookingStatus = document.getElementById("bookingStatus");
+    const summaryLabel = document.getElementById("summaryLabel");
+    const summaryTotal = document.getElementById("summaryTotal");
+    const summaryMeta = document.getElementById("summaryMeta");
+    const summaryList = document.getElementById("summaryList");
+    const regionGuideList = document.getElementById("regionGuideList");
+
+    function currentLanguage() {
+      return window.localStorage.getItem(LANGUAGE_STORAGE_KEY) === "jp" ? "jp" : "kr";
+    }
+
+    function getText(key) {
+      return TEXT[currentLanguage()][key];
+    }
+
+    function regionName(code, lang = currentLanguage()) {
+      return REGION_DATA[code][lang === "jp" ? "jp" : "kr"];
+    }
+
+    function regionDescription(code, lang = currentLanguage()) {
+      return REGION_DATA[code][lang === "jp" ? "detailJp" : "detailKr"];
+    }
+
+    function currency(value, lang = currentLanguage()) {
+      const amount = new Intl.NumberFormat(lang === "jp" ? "ja-JP" : "ko-KR").format(value);
+      return lang === "jp" ? `¥${amount}` : `${amount}엔`;
+    }
+
+    function getSelectedDetail() {
+      const detailList = DETAIL_OPTIONS[serviceCategory.value] || [];
+      return detailList.find((item) => item.id === detailZone.value) || null;
+    }
+
+    function populateServiceCategories() {
+      const previous = serviceCategory.value || SERVICE_CATEGORY_ORDER[0];
+      serviceCategory.innerHTML = SERVICE_CATEGORY_ORDER.map((code) => {
+        const selected = code === previous ? " selected" : "";
+        return `<option value="${code}"${selected}>${TEXT[currentLanguage()].serviceCategories[code]}</option>`;
+      }).join("");
+    }
+
+    function populateTripTypes() {
+      const previous = tripType.value || "oneWay";
+      tripType.innerHTML = TRIP_ORDER.map((code) => {
+        const selected = code === previous ? " selected" : "";
+        return `<option value="${code}"${selected}>${TEXT[currentLanguage()].tripTypes[code]}</option>`;
+      }).join("");
+    }
+
+    function populateVehicleTypes() {
+      const previous = vehicleType.value || "alphard";
+      vehicleType.innerHTML = VEHICLE_ORDER.map((code) => {
+        const selected = code === previous ? " selected" : "";
+        return `<option value="${code}"${selected}>${TEXT[currentLanguage()].vehicleTypes[code]}</option>`;
+      }).join("");
+    }
+
+    function populateRegions() {
+      const previous = region.value || "nahaCity";
+      region.innerHTML = Object.keys(REGION_DATA).map((code) => {
+        const selected = code === previous ? " selected" : "";
+        return `<option value="${code}"${selected}>${regionName(code)}</option>`;
+      }).join("");
+    }
+
+    function populatePartySizes() {
+      const currentValue = form.partySize.value;
+      const options = [`<option value="">${getText("partyPlaceholder")}</option>`]
+        .concat(TEXT[currentLanguage()].partySizes.map((item) => {
+          const selected = item.value === currentValue ? " selected" : "";
+          return `<option value="${item.value}"${selected}>${item.label}</option>`;
+        }));
+      form.partySize.innerHTML = options.join("");
+      form.partySize.value = currentValue || "";
+    }
+
+    function populateDetailZones() {
+      const detailList = DETAIL_OPTIONS[serviceCategory.value] || [];
+      const previous = detailList.some((item) => item.id === detailZone.value) ? detailZone.value : "";
+      detailZone.innerHTML = [`<option value="">${getText("detailPlaceholder")}</option>`]
+        .concat(detailList.map((item) => {
+          const label = currentLanguage() === "jp" ? item.jp : item.kr;
+          const selected = item.id === previous ? " selected" : "";
+          return `<option value="${item.id}"${selected}>${label}</option>`;
+        })).join("");
+      detailZone.value = previous;
+    }
+
+    function syncRegionDetails() {
+      const detail = getSelectedDetail();
+      if (detail) {
+        region.value = detail.region;
+        routeHint.value = currentLanguage() === "jp" ? detail.hintJp : detail.hintKr;
+        if (!pickupPlace.value) {
+          pickupPlace.placeholder = currentLanguage() === "jp" ? detail.pickupJp : detail.pickupKr;
+        }
+        if (!dropoffPlace.value) {
+          dropoffPlace.placeholder = currentLanguage() === "jp" ? detail.dropoffJp : detail.dropoffKr;
+        }
+      } else {
+        routeHint.value = getText("routeCustomHint");
+        pickupPlace.placeholder = getText("placeholderPickup");
+        dropoffPlace.placeholder = getText("placeholderDropoff");
+      }
+      regionDetail.value = regionDescription(region.value);
+    }
+
+    function updateFare() {
+      const selectedRegion = REGION_DATA[region.value];
+      const selectedVehicle = vehicleType.value || "alphard";
+      const oneWayFare = selectedRegion[selectedVehicle];
+      const total = tripType.value === "roundTrip" ? oneWayFare * 2 : oneWayFare;
+      baseFare.value = currency(oneWayFare);
+      totalFare.value = currency(total);
+      summaryLabel.textContent = `${regionName(region.value)} · ${TEXT[currentLanguage()].vehicleTypes[selectedVehicle]}`;
+      summaryTotal.textContent = currency(total);
+      summaryMeta.textContent = tripType.value === "roundTrip" ? getText("summaryMetaRoundTrip") : getText("summaryMetaOneWay");
+      regionDetail.value = regionDescription(region.value);
+      summaryList.innerHTML = [
+        getText("summaryBullet1"),
+        getText("summaryBullet2"),
+        getText("summaryBullet3")
+      ].map((item) => `<li>${item}</li>`).join("");
+    }
+
+    function renderRegionGuide() {
+      regionGuideList.innerHTML = Object.keys(REGION_DATA).map((code) => {
+        return `<li><strong>${regionName(code)}</strong> : ${regionDescription(code)}</li>`;
+      }).join("");
+    }
+
+    function applyStaticText() {
+      const lang = currentLanguage();
+      const copy = TEXT[lang];
+      document.documentElement.lang = lang === "jp" ? "ja" : "ko";
+      document.documentElement.setAttribute("data-lang", lang);
+      document.title = copy.pageTitle;
+      if (descriptionMeta) {
+        descriptionMeta.content = copy.metaDescription;
+      }
+
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const key = element.dataset.i18n;
+        if (key in copy) {
+          element.textContent = copy[key];
+        }
+      });
+
+      document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+        const key = element.dataset.i18nPlaceholder;
+        if (key in copy) {
+          element.placeholder = copy[key];
+        }
+      });
+
+      document.querySelectorAll("[data-i18n-alt]").forEach((element) => {
+        const key = element.dataset.i18nAlt;
+        if (key in copy) {
+          element.alt = copy[key];
+        }
+      });
+
+      document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+        const key = element.dataset.i18nAriaLabel;
+        if (key in copy) {
+          element.setAttribute("aria-label", copy[key]);
+        }
+      });
+
+      langButtons.forEach((button) => {
+        const active = button.dataset.langButton === lang;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+
+      populateServiceCategories();
+      populateTripTypes();
+      populateVehicleTypes();
+      populateRegions();
+      populatePartySizes();
+      populateDetailZones();
+      syncRegionDetails();
+      updateFare();
+      renderRegionGuide();
+    }
+
+    function initializeDefaults() {
+      populateServiceCategories();
+      populateTripTypes();
+      populateVehicleTypes();
+      populateRegions();
+      populatePartySizes();
+      serviceCategory.value = "airportPickup";
+      tripType.value = "oneWay";
+      vehicleType.value = "alphard";
+      region.value = "nahaCity";
+      populateDetailZones();
+      detailZone.selectedIndex = 1;
+      syncRegionDetails();
+      updateFare();
+      renderRegionGuide();
+    }
+
+    function showStatus(text, isError) {
+      bookingStatus.hidden = false;
+      bookingStatus.textContent = text;
+      bookingStatus.classList.toggle("is-error", Boolean(isError));
+    }
+
+    initializeDefaults();
+    applyStaticText();
+
+    serviceCategory.addEventListener("change", () => {
+      populateDetailZones();
+      syncRegionDetails();
+      updateFare();
+    });
+
+    detailZone.addEventListener("change", () => {
+      syncRegionDetails();
+      updateFare();
+    });
+
+    region.addEventListener("change", () => {
+      regionDetail.value = regionDescription(region.value);
+      updateFare();
+    });
+
+    tripType.addEventListener("change", updateFare);
+    vehicleType.addEventListener("change", updateFare);
+
+    langButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const nextLanguage = button.dataset.langButton;
+        if (!nextLanguage || nextLanguage === currentLanguage()) {
+          return;
+        }
+        window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
+        applyStaticText();
+      });
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      bookingStatus.hidden = true;
+
+      if (!form.reportValidity()) {
+        showStatus(getText("statusValidation"), true);
+        return;
+      }
+
+      if (window.location.protocol === "file:") {
+        showStatus(getText("statusFile"), true);
+        return;
+      }
+
+      const selectedDetail = getSelectedDetail();
+      const payload = {
+        inquiryType: "reservation",
+        serviceType: "other",
+        title: `[픽/드랍] ${selectedDetail ? selectedDetail.kr : REGION_DATA[region.value].kr}`,
+        preferredDate: form.preferredDate.value,
+        name: form.name.value.trim(),
+        phone: form.phone.value.trim(),
+        email: form.email.value.trim(),
+        website: form.website.value.trim(),
+        agree: form.agree.checked,
+        message: [
+          TEXT.kr.inquiryPrefix,
+          `서비스 유형: ${TEXT.kr.serviceCategories[serviceCategory.value]}`,
+          `이용 구간: ${TEXT.kr.tripTypes[tripType.value]}`,
+          `차량: ${TEXT.kr.vehicleTypes[vehicleType.value]}`,
+          `이동 지역: ${REGION_DATA[region.value].kr}`,
+          `상세 구간: ${selectedDetail ? selectedDetail.kr : "-"}`,
+          `구간 예시: ${selectedDetail ? selectedDetail.hintKr : "-"}`,
+          `편도 기준 요금: ${baseFare.value}`,
+          `예상 합계금액: ${totalFare.value}`,
+          `희망 날짜: ${form.preferredDate.value}`,
+          `희망 시간: ${form.preferredTime.value || "-"}`,
+          `탑승 인원: ${form.partySize.value}`,
+          `출발 장소: ${form.pickupPlace.value.trim()}`,
+          `도착 장소: ${form.dropoffPlace.value.trim()}`,
+          `항공편 / 티오프 정보: ${form.flightInfo.value.trim() || "-"}`,
+          `요청사항: ${form.message.value.trim() || "-"}`
+        ].join("\n")
+      };
+
+      submitButton.disabled = true;
+      submitButton.textContent = getText("submitLoading");
+
+      try {
+        const response = await fetch("/.netlify/functions/contact-inquiries", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(result.message || getText("statusError"));
+        }
+
+        showStatus(`${getText("statusSuccess")}${result.inquiry?.inquiryCode || "-"}`, false);
+        form.reset();
+        serviceCategory.value = "airportPickup";
+        tripType.value = "oneWay";
+        vehicleType.value = "alphard";
+        region.value = "nahaCity";
+        populateDetailZones();
+        detailZone.selectedIndex = 1;
+        populatePartySizes();
+        syncRegionDetails();
+        updateFare();
+      } catch (error) {
+        showStatus(error.message || getText("statusError"), true);
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = getText("submitIdle");
+      }
+    });
+  </script>
+</body>
+</html>
